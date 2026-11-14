@@ -42,8 +42,8 @@ Die Gestaltung orientiert sich am klassischen WoW-Interface: ein vollständig de
    * Häkchen und Kreuz sind Client-Texturen, keine Schriftzeichen (die Spielschrift enthält ✓/✗ nicht verlässlich).
    * Unberührte Quests (`0 %`) werden dezent gedimmt, da hier beim Abbrechen kein Fortschritt verloren geht.
 4. **Rewards auf einen Blick:**
-   * Bis zu drei kleine **Item-Icons** (20 × 20 px) für Wahl- und Festbelohnungen mit Rahmen in der Item-Qualitätsfarbe; weitere als `+N`. Mouseover öffnet den nativen `GameTooltip` samt Ausrüstungsvergleich (`Shift`).
-   * **Gold & XP:** rechts daneben übereinander (z. B. `45s` und `1.4k XP`), damit sofort erkennbar ist, ob eine Quest lukrativ ist oder nur Platz im Log frisst.
+   * Bis zu zwei kompakte **Item-Icons** (16 × 16 px) für Wahl- und Festbelohnungen mit Rahmen in der Item-Qualitätsfarbe; weitere als `+N`. Mouseover öffnet den nativen `GameTooltip` samt Ausrüstungsvergleich (`Shift`).
+   * **Gold & XP:** rechts daneben übereinander (z. B. `45s` und `1.4k XP`), damit sofort erkennbar ist, ob eine Quest lukrativ ist oder nur Platz im Log frisst. Die gemeinsame Belohnungsspalte richtet sich nach den Items und Beträgen der gefilterten Liste; Icons beginnen auf derselben linken Kante und übriger Raum steht den Zielen zur Verfügung.
 
 Rechts schließt die **Aktionsspalte** an (Abschnitt 3). Das Schloss zum Schützen einer Quest ist Teil dieser Spalte und kein eigener Informationsblock.
 
@@ -89,4 +89,5 @@ Spieltest mit Client 1.60.1 (Build 70938): Das Quest-Limit betrug 40, `QuestMapF
 - [ ] **Kartenbutton-Rahmen:** `Interface\Minimap\MiniMap-TrackingBorder` erschien im Forever-Test versetzt; der Rahmen wurde nach dem Screenshot neu ausgerichtet und muss erneut im Spiel geprüft werden. `/qp compat mapbutton simple` zeigt das eigene Symbol ohne Client-Rahmen, `classic` aktiviert ihn wieder.
 - [ ] **Fenstertexturen:** Passen `Interface\DialogFrame\UI-DialogBox-Background` und `UI-DialogBox-Border` in Forever? `/qp compat skin plain` schaltet auf die bisherige einfache Darstellung, `classic` aktiviert die Dialogtexturen wieder.
 - [ ] **Belohnungen:** Liefern die Reward-Funktionen in Forever für jede Quest-ID passende Icons, Geld und XP und funktioniert `GameTooltip:SetQuestLogItem` mit Quest-ID? `/qp compat rewards selected` nutzt stattdessen die vorübergehend ausgewählte Quest; `direct` aktiviert wieder den Standardweg. Fehlende Daten erscheinen als Fragezeichen.
+- [ ] **Münzsymbole:** Funktioniert `C_CurrencyInfo.GetCoinTextureString` in Forever und passt die Ausgabe in die Spalte? Bei fehlender API wird Text angezeigt; `/qp compat coins text` erzwingt Text, `native` verwendet wieder die Client-Symbole.
 - [ ] **Forever-Quest-Erkennung:** Die ID-Grenze 9665 ist nur eine Näherung. Forever Quest Tint verwendet stattdessen eine interne Classic-Liste; seine Funktion und Daten sind laut Quellcode nicht öffentlich zugänglich. Niedrige IDs werden nicht als Classic bestätigt und hohe IDs nicht als spezifisch für Forever garantiert.

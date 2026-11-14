@@ -195,7 +195,7 @@ Zeilen werden einmalig erzeugt (Pool von 28, genug für den 560 px hohen Bereich
 | 1 | Level-Badge | 60 | Symbol für Gruppen-/Elite-, Dungeon-, Raid- oder PvP-Quest vor dem Level in Schwierigkeitsfarbe |
 | 2 | Titel / Zone | 210 | zwei FontStrings (12 px / 10 px grau) |
 | 3 | Status | 220 | Badge `Fertig` / `Fehlgeschlagen` oder offene Ziele untereinander; lange Ziele werden umgebrochen |
-| 4 | Rewards | 128 | bis zu 3 Item-Buttons mit Qualitätsrahmen + `+N`, rechts davon Geld (oben) und XP (unten); fehlende Daten als Fragezeichen |
+| 4 | Rewards | variabel pro gefilterter Liste | bis zu 2 linksbündig ausgerichtete Item-Buttons mit Qualitätsrahmen + `+N`, rechts davon Geld mit Client-Münzsymbolen (oben) und XP (unten); bei kurzen Beträgen bleibt mehr Platz für Ziele |
 | A | Aktionen | 100 | Schützen, Auge, Teilen, Papierkorb (je 20×20) |
 
 * Das Schloss ist ein Element der Aktionsspalte, kein eigener Informationsblock.

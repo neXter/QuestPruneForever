@@ -2,7 +2,7 @@
 
 <img src="docs/assets/icon-256.png" alt="QuestPruneForever icon" width="128">
 
-Diagnostic preview for World of Warcraft Forever. Copy the `QuestPruneForever` folder to `_forever_/Interface/AddOns/` and reload the UI.
+A compact quest log for World of Warcraft Forever. Copy the `QuestPruneForever` folder to `_forever_/Interface/AddOns/` and reload the UI.
 
 Use `/qp` to open the quest list. Quest rows show available item rewards, money and XP. Protect keeps an individual quest from being abandoned. Every abandonment requires two clicks within three seconds, including with Shift held. Class and profession quest labels are inferred from quest-log headings and may be incomplete. Use `/qp dump` to print client API availability and quest data, `/qp debug` to toggle diagnostic output, and `/qp help` for commands. Further quest actions are planned for later versions.
 

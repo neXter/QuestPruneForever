@@ -1,5 +1,5 @@
 local ADDON = ...
-local VERSION = "0.2.0"
+local VERSION = "1.0.0"
 local de = GetLocale() == "deDE"
 local db
 local function out(s) print("|cff66ccffQuestPrune|r: " .. s) end
@@ -60,10 +60,16 @@ end
 local function formatMoney(copper)
   if type(copper)~="number" then return "?" end
   if copper<=0 then return "-" end
-  local gold=math.floor(copper/10000); local silver=math.floor(copper/100)%100
-  if gold>0 then return gold.."g"..(silver>0 and " "..silver.."s" or "") end
-  if silver>0 then return silver.."s" end
-  return math.floor(copper)..(de and "k" or "c")
+  if not (db and db.compat and db.compat.coins=="text") and available(C_CurrencyInfo,"GetCoinTextureString") then
+    local ok, text=pcall(C_CurrencyInfo.GetCoinTextureString,copper,10)
+    if ok and type(text)=="string" and text~="" then return text end
+  end
+  local gold=math.floor(copper/10000); local silver=math.floor(copper/100)%100; local bronze=math.floor(copper)%100
+  local parts={}
+  if gold>0 then parts[#parts+1]=gold.."g" end
+  if silver>0 then parts[#parts+1]=silver.."s" end
+  if bronze>0 then parts[#parts+1]=bronze..(de and "k" or "c") end
+  return table.concat(parts," ")
 end
 local function formatXP(xp)
   if type(xp)~="number" then return "? XP" end
@@ -368,11 +374,11 @@ local function createWindow()
     if i % 2 == 0 then local stripe=row:CreateTexture(nil,"BACKGROUND"); stripe:SetAllPoints(); stripe:SetColorTexture(0.8,0.57,0.27,0.045) end
     row.level=row:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall"); row.level:SetPoint("LEFT", 26, 0); row.level:SetWidth(40); row.level:SetJustifyH("LEFT")
     row.kind=row:CreateTexture(nil, "ARTWORK"); row.kind:SetSize(16,16); row.kind:SetPoint("LEFT", 6, 0)
-    row.text=row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.text:SetPoint("LEFT", 70, 6); row.text:SetWidth(176); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
-    row.category=row:CreateTexture(nil,"ARTWORK"); row.category:SetSize(16,16); row.category:SetPoint("LEFT",249,0)
-    row.forever=row:CreateTexture(nil,"ARTWORK"); row.forever:SetSize(16,16); row.forever:SetPoint("LEFT",268,0); row.forever:SetTexture(ICONS.."forever")
-    row.zone=row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall"); row.zone:SetPoint("LEFT", 70, -7); row.zone:SetWidth(213); row.zone:SetJustifyH("LEFT"); row.zone:SetWordWrap(false)
-    row.status=row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.status:SetPoint("LEFT", 290, 0); row.status:SetWidth(170); row.status:SetJustifyH("LEFT"); row.status:SetJustifyV("MIDDLE"); row.status:SetWordWrap(true)
+    row.text=row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.text:SetPoint("LEFT", 70, 6); row.text:SetWidth(150); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
+    row.category=row:CreateTexture(nil,"ARTWORK"); row.category:SetSize(16,16); row.category:SetPoint("LEFT",222,0)
+    row.forever=row:CreateTexture(nil,"ARTWORK"); row.forever:SetSize(16,16); row.forever:SetPoint("LEFT",241,0); row.forever:SetTexture(ICONS.."forever")
+    row.zone=row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall"); row.zone:SetPoint("LEFT", 70, -7); row.zone:SetWidth(150); row.zone:SetJustifyH("LEFT"); row.zone:SetWordWrap(false)
+    row.status=row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.status:SetPoint("LEFT", 260, 0); row.status:SetWidth(170); row.status:SetJustifyH("LEFT"); row.status:SetJustifyV("MIDDLE"); row.status:SetWordWrap(true)
     row:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
     row:SetScript("OnClick", function(self)
       if activeTab=="abandoned" then if self.data then setWaypoint(self.data.record) end; return end
@@ -438,6 +444,7 @@ local function createWindow()
   end
   -- Compact icon tabs leave space for the localized sort label.
   local measure=window:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall")
+  window.rewardWidthMeasure=measure
   for _, key in ipairs(filters) do
     local button=window.filterButtons[key]
     local filterName=filterLabels()[key]
@@ -458,13 +465,13 @@ local function createWindow()
   abandonedButton:SetScript("OnClick",function() selectTab("abandoned") end)
   window.activeTab=activeButton; window.abandonedTab=abandonedButton
   for _, row in ipairs(window.rows) do
-    local group=CreateFrame("Frame",nil,row); group:SetSize(128,26); group:SetPoint("RIGHT",row.protect,"LEFT",-5,0); row.rewards=group
-    group.money=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.money:SetPoint("TOPRIGHT",-1,-1); group.money:SetWidth(50); group.money:SetJustifyH("RIGHT"); group.money:SetWordWrap(false); group.money:SetTextColor(1,0.82,0)
-    group.xp=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.xp:SetPoint("BOTTOMRIGHT",-1,1); group.xp:SetWidth(50); group.xp:SetJustifyH("RIGHT"); group.xp:SetWordWrap(false); group.xp:SetTextColor(0.6,0.75,1)
-    group.more=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.more:SetPoint("RIGHT",group.money,"LEFT",-1,0); group.more:SetWidth(17); group.more:SetJustifyH("RIGHT")
+    local group=CreateFrame("Frame",nil,row); group:SetSize(138,26); group:SetPoint("RIGHT",row.protect,"LEFT",-5,0); row.rewards=group
+    group.money=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.money:SetPoint("TOPRIGHT",-1,-1); group.money:SetWidth(68); group.money:SetJustifyH("RIGHT"); group.money:SetWordWrap(false); group.money:SetTextColor(1,0.82,0)
+    group.xp=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.xp:SetPoint("BOTTOMRIGHT",-1,1); group.xp:SetWidth(68); group.xp:SetJustifyH("RIGHT"); group.xp:SetWordWrap(false); group.xp:SetTextColor(0.6,0.75,1)
+    group.more=group:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); group.more:SetPoint("RIGHT",group.money,"LEFT",-1,0); group.more:SetWidth(14); group.more:SetJustifyH("RIGHT")
     group.items={}
-    for i=1,3 do
-      local item=CreateFrame("Button",nil,group); item:SetSize(18,18); item:SetPoint("LEFT",(i-1)*20,0)
+    for i=1,2 do
+      local item=CreateFrame("Button",nil,group); item:SetSize(16,16); item:SetPoint("LEFT",(i-1)*18,0)
       item.border=item:CreateTexture(nil,"BACKGROUND"); item.border:SetAllPoints(); item.border:SetColorTexture(0.6,0.6,0.6,1)
       item.icon=item:CreateTexture(nil,"ARTWORK"); item.icon:SetPoint("TOPLEFT",1,-1); item.icon:SetPoint("BOTTOMRIGHT",-1,1)
       item.count=item:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall"); item.count:SetPoint("BOTTOMRIGHT",0,0)
@@ -592,11 +599,29 @@ render = function()
   -- backwards so the final scroll position contains no avoidable empty space.
   local listHeight=LIST_HEIGHT
   local measureRow=window.rows[1]
-  local measureWidth=math.max(55, 690-2-measureRow.button:GetWidth()-3-measureRow.protect:GetWidth()-5-128-8-290)
-  measureRow.status:SetWidth(measureWidth)
+  local moneyMeasure=window.rewardWidthMeasure
+  local maxMoneyWidth,maxIcons,hasMore=32,0,false
   for _, entry in ipairs(entries) do
     if entry.heading then entry.height=HEADER_HEIGHT
     else
+      local reward=readRewards(entry.info.questID)
+      entry.reward=reward; entry.moneyText=formatMoney(reward.money); entry.xpText=formatXP(reward.xp)
+      moneyMeasure:SetText(entry.moneyText); local moneyWidth=moneyMeasure:GetStringWidth() or 0
+      moneyMeasure:SetText(entry.xpText); local xpWidth=moneyMeasure:GetStringWidth() or 0
+      maxMoneyWidth=math.max(maxMoneyWidth,math.min(110,math.ceil(math.max(moneyWidth,xpWidth))+4))
+      local shown=math.min(2,#reward.items)
+      if shown==0 and reward.unknown then shown=1 end
+      maxIcons=math.max(maxIcons,shown)
+      if #reward.items>2 then hasMore=true end
+    end
+  end
+  local iconWidth=maxIcons>0 and (maxIcons*18-2) or 0
+  local rewardWidth=maxMoneyWidth+iconWidth+(hasMore and 16 or 0)+(maxIcons>0 and 3 or 0)
+  local statusWidth=math.max(55,690-2-measureRow.button:GetWidth()-3-measureRow.protect:GetWidth()-5-rewardWidth-8-260)
+  for _, entry in ipairs(entries) do
+    if not entry.heading then
+      entry.moneyWidth=maxMoneyWidth; entry.rewardWidth=rewardWidth; entry.statusWidth=statusWidth
+      measureRow.status:SetWidth(entry.statusWidth)
       measureRow.status:SetHeight(0); measureRow.status:SetText(statusText(entry))
       local height=measureRow.status:GetStringHeight() or 0
       entry.height=math.min(listHeight,math.max(28,math.ceil(height)+6))
@@ -648,7 +673,7 @@ render = function()
       local color=call(GetQuestDifficultyColor,q.level)
       if type(color)=="table" then widget.level:SetTextColor(color.r or 1,color.g or 1,color.b or 1) else widget.level:SetTextColor(1,0.82,0) end
       widget.text:SetText(tostring(q.title or "?")); widget.zone:SetText(tostring(row.zone))
-      widget.status:SetWidth(measureWidth)
+      widget.status:SetWidth(row.statusWidth)
       widget.status:SetHeight(0); widget.status:SetText(state)
       widget:Show()
       local rowHeight=row.height
@@ -667,9 +692,10 @@ render = function()
       widget.button.caption:SetText(armed==q.questID and label("Sure?", "Sicher?") or label("Abandon", "Abbrechen"))
       if not full then widget:Show() end
       if armed==q.questID then widget.button.bg:SetColorTexture(0.55,0.12,0.10,1) else widget.button.bg:SetColorTexture(0.16,0.12,0.08,1) end
-      local reward=readRewards(q.questID); widget.rewards:Show()
-      widget.rewards.money:SetText(formatMoney(reward.money)); widget.rewards.xp:SetText(formatXP(reward.xp))
-      widget.rewards.more:SetText(#reward.items>3 and "+"..(#reward.items-3) or "")
+      local reward=row.reward; widget.rewards:Show()
+      widget.rewards:SetWidth(row.rewardWidth); widget.rewards.money:SetWidth(row.moneyWidth); widget.rewards.xp:SetWidth(row.moneyWidth)
+      widget.rewards.money:SetText(row.moneyText); widget.rewards.xp:SetText(row.xpText)
+      widget.rewards.more:SetText(#reward.items>2 and "+"..(#reward.items-2) or "")
       for index, item in ipairs(widget.rewards.items) do
         local info=reward.items[index]
         if not info and index==1 and reward.unknown then info={questID=q.questID} end
@@ -766,11 +792,14 @@ SlashCmdList.QUESTPRUNE = function(msg)
       db.compat.skin=value; applyWindowSkin(); out("skin: " .. value)
     elseif key == "rewards" and (value == "direct" or value == "selected") then
       db.compat.rewards=value; if window and window:IsShown() then render() end; out("rewards: " .. value)
+    elseif key == "coins" and (value == "native" or value == "text") then
+      db.compat.coins=value; if window and window:IsShown() then render() end; out("coins: " .. value)
     elseif key == "" then
       out("mapbutton: " .. (db.compat.mapbutton or "classic") .. " (/qp compat mapbutton classic|simple)")
       out("skin: " .. (db.compat.skin or "classic") .. " (/qp compat skin classic|plain)")
       out("rewards: " .. (db.compat.rewards or "direct") .. " (/qp compat rewards direct|selected)")
-    else out("/qp compat mapbutton classic|simple  |  /qp compat skin classic|plain  |  /qp compat rewards direct|selected") end
+      out("coins: " .. (db.compat.coins or "native") .. " (/qp compat coins native|text)")
+    else out("/qp compat mapbutton classic|simple  |  skin classic|plain  |  rewards direct|selected  |  coins native|text") end
   elseif cmd == "help" then out("/qp dump | debug | lock | unlock | reset | compat | help")
   else toggleWindow() end
 end

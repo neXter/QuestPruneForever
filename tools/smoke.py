@@ -44,7 +44,7 @@ CreateFrame = function(kind, name, parent)
   function f:SetBackdrop(value) self.backdrop=value end
   function f:SetScript(key, fn) self.scripts[key]=fn; if key == "OnEvent" then self.handler=fn; frame=self end end
   function f:HookScript(key, fn) self.hooks[key]=fn end
-  function f:CreateFontString() local t={}; function t:SetText(s) self.text=s end; function t:GetStringWidth() return #(self.text or "")*6 end; function t:GetStringHeight() local _,n=(self.text or ""):gsub("\n", ""); return (n+1)*12 end; setmetatable(t,{__index=function() return function() end end}); return t end
+  function f:CreateFontString() local t={}; function t:SetText(s) self.text=s end; function t:SetWidth(w) self.width=w end; function t:GetStringWidth() return #(self.text or "")*6 end; function t:GetStringHeight() local _,n=(self.text or ""):gsub("\n", ""); return (n+1)*12 end; setmetatable(t,{__index=function() return function() end end}); return t end
   function f:CreateTexture() local t={}; function t:SetTexture(path) self.texture=path end; function t:SetColorTexture(r,g,b,a) self.color={r,g,b,a} end; function t:SetShown(shown) self.shown=shown end; setmetatable(t,{__index=function() return function() end end}); return t end
   function f:IsShown() return self.shown end
   function f:IsVisible() return self.shown end
@@ -286,12 +286,13 @@ def main():
       GetNumQuestLogRewards=function(id) checkID(id); return 2 end
       GetQuestLogChoiceInfo=function(i,id) checkID(id); if i==2 and not loaded then return nil,nil end; return "Choice",100+i,2,2,true,1000+i end
       GetQuestLogRewardInfo=function(i,id) checkID(id); return "Reward",200+i,1,3,true,2000+i end
-      GetQuestLogRewardMoney=function(id) checkID(id); return 4500 end
+      moneyValue=4500; GetQuestLogRewardMoney=function(id) checkID(id); return moneyValue end
       GetQuestLogRewardXP=function(id) checkID(id); return 1400 end
       C_QuestLog.RequestLoadQuestByID=function(id) assert(id==42); requests=requests+1 end
       QuestPruneForeverDB.sort="level"; event("QUEST_LOG_UPDATE"); flush()
       local rewards=frames[10].rewards
-      assert(rewards.money.text=="45s" and rewards.xp.text=="1.4k XP" and rewards.more.text=="+1")
+      assert(frames[10].status.width>=120)
+      assert(rewards.money.text=="45s" and rewards.xp.text=="1.4k XP" and rewards.more.text=="+2")
       assert(rewards.items[1].reward.kind=="choice" and rewards.items[1].icon.texture==101)
       assert(rewards.items[2].icon.texture:match("QuestionMark$") and requests==1)
       loaded=true; event("QUEST_DATA_LOAD_RESULT",42,true); flush()
@@ -303,6 +304,25 @@ def main():
       rewards.items[1].scripts.OnEnter(rewards.items[1]); rewards.items[1].scripts.OnLeave(rewards.items[1])
       assert(tooltipItem[3]==nil and tooltipItem[4]==42 and selected==7)
       selectedMode=false; command("compat rewards direct"); assert(selected==7)
+      moneyValue=12345
+      C_CurrencyInfo={GetCoinTextureString=function(amount,size) assert(amount==12345 and size==10); return "1|Tgold:10|t 23|Tsilver:10|t 45|Tcopper:10|t" end}
+      event("QUEST_LOG_UPDATE"); flush()
+      assert(rewards.money.text=="1|Tgold:10|t 23|Tsilver:10|t 45|Tcopper:10|t")
+      command("compat coins text"); assert(rewards.money.text=="1g 23s 45c")
+      C_CurrencyInfo.GetCoinTextureString=function() error("unavailable") end
+      command("compat coins native"); assert(rewards.money.text=="1g 23s 45c")
+      C_QuestLog.GetNumQuestLogEntries=function() return 3,2 end
+      C_QuestLog.GetInfo=function(i) if i==1 then return {isHeader=true,title="Test"} end return {questID=199+i,title=("Quest %d"):format(i),level=5} end
+      GetNumQuestLogChoices=function(id) return id==201 and 0 or 3 end
+      GetNumQuestLogRewards=function() return 0 end
+      GetQuestLogChoiceInfo=function(i,id) return "Item",100+i,1,2,true,1000+i end
+      GetQuestLogRewardMoney=function() return 0 end
+      GetQuestLogRewardXP=function() return 1400 end
+      C_QuestLog.RequestLoadQuestByID=function() end
+      event("QUEST_LOG_UPDATE"); flush()
+      assert(frames[10].data.info.questID==201 and frames[13].data.info.questID==202)
+      assert(frames[10].rewards:GetWidth()==frames[13].rewards:GetWidth())
+      assert(frames[10].status.width==frames[13].status.width and frames[13].rewards.items[2]:IsShown() and frames[13].rewards.more.text=="+1")
     ''')
     lua.execute('C_QuestLog.GetQuestObjectives = nil; C_QuestLog.GetInfo = nil; command("dump")')
     german = LuaRuntime(unpack_returned_tuples=True)

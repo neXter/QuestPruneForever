@@ -15,7 +15,7 @@ See quest levels, locations and open objectives in one list. Group the list by d
 ### Features
 
 - **A clearer quest list:** Open objectives appear on separate lines, and rows expand when they need more space.
-- **Rewards at a glance:** See up to three item reward icons alongside money and XP; additional items are counted, and hovering an icon opens its item tooltip.
+- **Rewards at a glance:** See up to two item reward icons alongside money and XP; additional items are counted, and hovering an icon opens its item tooltip.
 - **Sort and filter:** Find quests by difficulty, progress, type, class or profession. Filter buttons show a tooltip and dim when no quests match.
 - **You stay in control:** Protect individual quests from accidental abandonment. Every unprotected quest requires two clicks within three seconds to abandon; there are no mass actions.
 - **Back and forth:** Click a quest to open its details in the standard quest log. The QuestPrune button in the map and quest log takes you back.
@@ -48,7 +48,7 @@ Sieh Queststufen, Gebiete und offene Ziele in einer Liste. Gruppiere sie nach Sc
 ### Funktionen
 
 - **Übersichtliche Questliste:** Offene Ziele stehen untereinander; bei Bedarf wächst die Questzeile mit.
-- **Belohnungen im Blick:** Bis zu drei Item-Icons stehen neben Geld und Erfahrungspunkten; weitere Gegenstände werden gezählt. Ein Tooltip zeigt das jeweilige Item.
+- **Belohnungen im Blick:** Bis zu zwei Item-Icons stehen neben Geld und Erfahrungspunkten; weitere Gegenstände werden gezählt. Ein Tooltip zeigt das jeweilige Item.
 - **Sortieren und filtern:** Finde Quests nach Schwierigkeit, Fortschritt, Typ, Klasse oder Beruf. Filter zeigen einen Tooltip und werden bei fehlenden Treffern ausgegraut.
 - **Du behältst die Kontrolle:** Schütze einzelne Quests vor versehentlichem Abbruch. Jede ungeschützte Quest benötigt zwei Klicks innerhalb von drei Sekunden; es gibt keine Massenaktionen.
 - **Schnell wechseln:** Ein Klick auf eine Quest öffnet ihre Details im Standard-Questlog. Über das QuestPrune-Symbol in Karte und Questlog geht es zurück.

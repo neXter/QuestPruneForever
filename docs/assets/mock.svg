@@ -15,7 +15,7 @@
 </defs>
 <rect width="1060" height="724" fill="#2a2f2a"/>
 <text x="20" y="28" font-size="15" fill="#e8e0c8" font-weight="700">QuestPruneForever – Mock</text>
-<text x="222" y="28" font-size="12" fill="#a8a8a0">Sortierung: Level · Gebiet · Fortschritt · Typ (inkl. Klasse/Beruf)</text>
+<text x="222" y="28" font-size="12" fill="#a8a8a0">Belohnungsicons linksbündig · mehr Platz für Questziele</text>
 <g transform="translate(20,44)">
 <rect width="720" height="660" rx="6" fill="url(#classic-panel)" stroke="url(#classic-frame)" stroke-width="6"/>
 <rect x="1" y="1" width="718" height="30" rx="5" fill="#6e3f27"/>
@@ -37,7 +37,7 @@
 <text x="54" y="84" font-size="12" fill="#f0e6c8" font-weight="600">Verlorene Vorratskiste</text>
 <text x="54" y="96" font-size="10" fill="#8a8a8a">Westfall</text>
 <text x="266" y="90" font-size="11" fill="#d0d0d0">0/1 Kiste</text>
-<text x="598" y="84" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">12</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="84" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">12</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="96" font-size="10" fill="#9ab4e0" text-anchor="end">420 XP</text>
 </g>
 <rect x="612" y="76" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -56,7 +56,7 @@
 <text x="266" y="118" font-size="11" fill="#d0d0d0">0/8 Wolfsfell</text>
 <rect x="438" y="104" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#ffffff" stroke-width="1.5"/>
 <path d="M443 119L453 109M450 109h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="112" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">15</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="112" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">15</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="124" font-size="10" fill="#9ab4e0" text-anchor="end">450 XP</text>
 </g>
 <rect x="612" y="104" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -74,7 +74,7 @@
 <rect x="266" y="134" width="62" height="16" rx="8" fill="#1d4a20" stroke="#40a040"/>
 <use href="#i-check" x="272" y="136" width="12" height="12" color="#7cfc7c"/>
 <text x="287" y="146" font-size="11" fill="#9cfc9c" font-weight="600">Fertig</text>
-<text x="598" y="140" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">8</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="140" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">8</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="152" font-size="10" fill="#9ab4e0" text-anchor="end">300 XP</text>
 </g>
 <rect x="612" y="132" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -95,7 +95,7 @@
 <path d="M443 175L453 165M450 165h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="160" width="20" height="20" rx="2" fill="#4e3a3a" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M465 175L475 165M472 165h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="168" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="168" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="180" font-size="10" fill="#9ab4e0" text-anchor="end">600 XP</text>
 </g>
 <rect x="612" y="160" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -131,7 +131,7 @@
 <path d="M443 231L453 221M450 221h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="216" width="20" height="20" rx="2" fill="#4a3a28" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M465 231L475 221M472 221h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="224" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">45</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="224" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">45</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="236" font-size="10" fill="#9ab4e0" text-anchor="end">1.4k XP</text>
 </g>
 <rect x="612" y="216" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -151,9 +151,8 @@
 <path d="M443 259L453 249M450 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="244" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#0070dd" stroke-width="1.5"/>
 <path d="M465 259L475 249M472 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<rect x="482" y="244" width="20" height="20" rx="2" fill="#3e2e46" stroke="#0070dd" stroke-width="1.5"/>
-<path d="M487 259L497 249M494 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="252" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">10</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="484" y="258" font-size="10" fill="#bbb">+1</text>
+<text x="598" y="252" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">●</tspan> <tspan fill="#eee">10</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="264" font-size="10" fill="#9ab4e0" text-anchor="end">2.1k XP</text>
 </g>
 <rect x="612" y="244" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -172,7 +171,7 @@
 <text x="266" y="286" font-size="11" fill="#d0d0d0">6/8 Spinnenseide</text>
 <rect x="438" y="272" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M443 287L453 277M450 277h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="280" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">30</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="280" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">30</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="292" font-size="10" fill="#9ab4e0" text-anchor="end">1.2k XP</text>
 </g>
 <rect x="612" y="272" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -189,7 +188,7 @@
 <text x="287" y="314" font-size="11" fill="#ff9090" font-weight="600">Fehlgeschlagen</text>
 <rect x="438" y="300" width="20" height="20" rx="2" fill="#3e2e46" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M443 315L453 305M450 305h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="308" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">40</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="308" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">40</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="320" font-size="10" fill="#9ab4e0" text-anchor="end">1.5k XP</text>
 </g>
 <rect x="612" y="300" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -206,7 +205,7 @@
 <text x="54" y="336" font-size="12" fill="#f0e6c8" font-weight="600">Gnollplage</text>
 <text x="54" y="348" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
 <text x="266" y="342" font-size="11" fill="#d0d0d0">12/15 Gnolle</text>
-<text x="598" y="336" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="336" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="348" font-size="10" fill="#9ab4e0" text-anchor="end">1.6k XP</text>
 </g>
 <rect x="612" y="328" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -226,7 +225,7 @@
 <path d="M443 371L453 361M450 361h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="356" width="20" height="20" rx="2" fill="#3a4450" stroke="#0070dd" stroke-width="1.5"/>
 <path d="M465 371L475 361M472 361h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="364" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">55</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="364" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">55</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="376" font-size="10" fill="#9ab4e0" text-anchor="end">1.8k XP</text>
 </g>
 <rect x="612" y="356" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -245,7 +244,7 @@
 <text x="266" y="398" font-size="11" fill="#d0d0d0">0/12 Ghule</text>
 <rect x="438" y="384" width="20" height="20" rx="2" fill="#3a4450" stroke="#ffffff" stroke-width="1.5"/>
 <path d="M443 399L453 389M450 389h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="392" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">60</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="392" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">60</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="404" font-size="10" fill="#9ab4e0" text-anchor="end">1.9k XP</text>
 </g>
 <rect x="612" y="384" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -265,10 +264,8 @@
 <path d="M443 427L453 417M450 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="412" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#0070dd" stroke-width="1.5"/>
 <path d="M465 427L475 417M472 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<rect x="482" y="412" width="20" height="20" rx="2" fill="#3e2e46" stroke="#0070dd" stroke-width="1.5"/>
-<path d="M487 427L497 417M494 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="504" y="426" font-size="10" fill="#bbb">+1</text>
-<text x="598" y="420" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan></tspan></text>
+<text x="484" y="426" font-size="10" fill="#bbb">+2</text>
+<text x="598" y="420" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">●</tspan></tspan></text>
 <text x="598" y="432" font-size="10" fill="#9ab4e0" text-anchor="end">2.6k XP</text>
 </g>
 <rect x="612" y="412" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -289,7 +286,7 @@
 <text x="287" y="454" font-size="11" fill="#9cfc9c" font-weight="600">Fertig</text>
 <rect x="438" y="440" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M443 455L453 445M450 445h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="448" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="448" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="460" font-size="10" fill="#9ab4e0" text-anchor="end">1.2k XP</text>
 </g>
 <rect x="612" y="440" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -307,7 +304,7 @@
 <text x="266" y="482" font-size="11" fill="#d0d0d0">3/9 Raptorkrallen</text>
 <rect x="438" y="468" width="20" height="20" rx="2" fill="#1a1c24" stroke="#777" stroke-dasharray="3 2"/>
 <text x="448" y="482.5" font-size="12" fill="#aaa" font-weight="700" text-anchor="middle">?</text>
-<text x="598" y="476" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">65</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="476" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">65</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="488" font-size="10" fill="#9ab4e0" text-anchor="end">2.0k XP</text>
 </g>
 <rect x="612" y="468" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -326,7 +323,7 @@
 <text x="266" y="510" font-size="11" fill="#d0d0d0">5/10 Zwerge</text>
 <rect x="438" y="496" width="20" height="20" rx="2" fill="#2e4636" stroke="#1eff00" stroke-width="1.5"/>
 <path d="M443 511L453 501M450 501h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="504" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">70</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="504" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">70</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="516" font-size="10" fill="#9ab4e0" text-anchor="end">2.2k XP</text>
 </g>
 <rect x="612" y="496" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -342,7 +339,7 @@
 <text x="54" y="532" font-size="12" fill="#f0e6c8" font-weight="600">Vergiftetes Wasser</text>
 <text x="54" y="544" font-size="10" fill="#8a8a8a">Sumpfland</text>
 <text x="266" y="538" font-size="11" fill="#d0d0d0">0/6 Wasserproben</text>
-<text x="598" y="532" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">75</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="532" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">75</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="544" font-size="10" fill="#9ab4e0" text-anchor="end">2.4k XP</text>
 </g>
 <rect x="612" y="524" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -363,7 +360,7 @@
 <path d="M443 567L453 557M450 557h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
 <rect x="460" y="552" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
 <path d="M465 567L475 557M472 557h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="560" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="560" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">●</tspan> <tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="572" font-size="10" fill="#9ab4e0" text-anchor="end">3.0k XP</text>
 </g>
 <rect x="612" y="552" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
@@ -381,7 +378,7 @@
 <text x="266" y="594" font-size="11" fill="#d0d0d0">0/8 Hauer</text>
 <rect x="438" y="580" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
 <path d="M443 595L453 585M450 585h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
-<text x="598" y="588" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="588" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">●</tspan> <tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">●</tspan></tspan></text>
 <text x="598" y="600" font-size="10" fill="#9ab4e0" text-anchor="end">3.4k XP</text>
 </g>
 <rect x="612" y="580" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
