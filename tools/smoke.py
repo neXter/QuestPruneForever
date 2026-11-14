@@ -35,15 +35,21 @@ C_QuestLog = {
   GetQuestObjectives = function() if noObjectives then return {} end return {{text="Collect", numFulfilled=have, numRequired=2}} end,
 }
 UIParent = {}; UISpecialFrames = {}; tinsert = table.insert
+GameTooltip = setmetatable({}, {__index=function() return function() end end})
 frames = {}
 CreateFrame = function(kind, name, parent)
   local f = {shown=true, scripts={}, children={}}
   setmetatable(f, {__index=function(_, key) if key == "pending" then return nil end return function() end end})
   function f:RegisterEvent() end
   function f:SetScript(key, fn) self.scripts[key]=fn; if key == "OnEvent" then self.handler=fn; frame=self end end
-  function f:CreateFontString() local t={}; setmetatable(t,{__index=function() return function() end end}); return t end
+  function f:CreateFontString() local t={}; function t:SetText(s) self.text=s end; function t:GetStringHeight() local _,n=(self.text or ""):gsub("\n", ""); return (n+1)*12 end; setmetatable(t,{__index=function() return function() end end}); return t end
   function f:CreateTexture() local t={}; setmetatable(t,{__index=function() return function() end end}); return t end
   function f:IsShown() return self.shown end
+  function f:SetHeight(h) self.height=h end
+  function f:GetHeight() return self.height or 28 end
+  function f:SetPoint(...) self.point={...} end
+  function f:LockHighlight() self.highlightLocked=true end
+  function f:UnlockHighlight() self.highlightLocked=false end
   function f:Show() self.shown=true end
   function f:Hide() self.shown=false end
   function f:GetPoint() return "CENTER", nil, "CENTER", 0, 0 end
@@ -81,8 +87,8 @@ def main():
       command("")
       for _, f in ipairs(frames) do if f.scripts.OnClick then testbutton=f end end
       -- The first row button follows the title buttons in the frame list.
-      testbutton=frames[8]
-      local questrow=frames[7]
+      testbutton=frames[11]
+      local questrow=frames[10]
       opened=nil
       QuestMapFrame_OpenToQuestDetails=function(id) opened=id end
       questrow.scripts.OnClick(questrow)
@@ -92,7 +98,13 @@ def main():
       assert(abandoned==0)
       testbutton.scripts.OnClick()
       assert(abandoned==1 and selected==7)
-      local protect=frames[9]
+      local protect=frames[12]
+      for _, button in ipairs({testbutton, protect}) do
+        button.scripts.OnEnter(button)
+        assert(questrow.highlightLocked)
+        button.scripts.OnLeave(button)
+        assert(not questrow.highlightLocked)
+      end
       protect.scripts.OnClick()
       assert(QuestPruneForeverDB.chars["Realm-Tester"].protected[42])
       testbutton.scripts.OnClick(); testbutton.scripts.OnClick()
@@ -110,6 +122,28 @@ def main():
       assert(abandoned==4)
       protect.scripts.OnClick(); event("QUEST_REMOVED",42)
       assert(not QuestPruneForeverDB.chars["Realm-Tester"].protected[42])
+      C_QuestLog.GetNumQuestLogEntries=function() return 4, 2 end
+      C_QuestLog.GetInfo=function(i)
+        if i==1 then return {isHeader=true,title="Alpha"} end
+        if i==2 then return {questID=42,title="First",level=5} end
+        if i==3 then return {isHeader=true,title="Beta"} end
+        return {questID=43,title="Second",level=10,isComplete=true}
+      end
+      GetQuestDifficultyColor=function(level) if level==5 then return {r=.5,g=.5,b=.5} end return {r=1,g=1,b=0} end
+      QuestPruneForeverDB.sort="zone"; event("QUEST_LOG_UPDATE"); flush()
+      assert(frames[7].header.text=="Alpha" and frames[10].data.info.questID==42)
+      assert(frames[13].header.text=="Beta" and frames[16].data.info.questID==43)
+      QuestPruneForeverDB.sort="level"; event("QUEST_LOG_UPDATE"); flush()
+      assert(frames[7].header.text=="Grey" and frames[13].header.text=="Yellow")
+      QuestPruneForeverDB.sort="progress"; event("QUEST_LOG_UPDATE"); flush()
+      assert(frames[7].header.text=="Unknown progress" and frames[13].header.text=="Ready to turn in")
+      C_QuestLog.GetQuestObjectives=function(id)
+        if id==42 then return {{text="First",numFulfilled=0,numRequired=1}, {text="Second",numFulfilled=0,numRequired=1}, {text="Third",numFulfilled=0,numRequired=1}, {text="Fourth",numFulfilled=0,numRequired=1}} end
+        return {}
+      end
+      QuestPruneForeverDB.sort="zone"; event("QUEST_LOG_UPDATE"); flush()
+      assert(frames[10].status.text=="First\\nSecond\\nThird\\nFourth")
+      assert(frames[10]:GetHeight()==54 and frames[13].point[3]==-141)
     ''')
     lua.execute('C_QuestLog.GetQuestObjectives = nil; C_QuestLog.GetInfo = nil; command("dump")')
     print("Chat output:")

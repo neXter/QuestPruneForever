@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+- Replace quest type letters with group, dungeon and PvP icons and use icon buttons for quest protection and abandonment.
+- Keep the quest row highlighted while hovering over its action buttons.
+- Group sorted quests under zone, difficulty-color, or progress-status headings.
+- Give the window warm, classic-style borders and controls.
+- Show each open objective on its own line and expand quest rows to prevent text overlap.
+- Use smaller, understated section headings.
+- Center quest names vertically, including when the zone is hidden by grouping.
+- Use a window lock icon and show labels beside the quest action icons.
+- Use a reject icon for abandoning quests.
+
 ## [0.2.0] - 2026-11-14
 
 - Add a scrollable quest list with sorting, filters, capacity and a movable window.

@@ -150,8 +150,9 @@ OnShow ──► dirty? ──► Refresh() sofort                              
 ### 5.1 Hauptfenster
 
 * `QuestPruneForeverFrame`, `BackdropTemplate`, `ESC` schließt (Eintrag in `UISpecialFrames`).
+* Klassisch inspirierte Gestaltung mit warmem dunklem Hintergrund, goldbraunem Rahmen, eingefassten Buttons und Blizzard-Schriften; bestehende Client-Tooltip-Texturen bilden den Fensterrahmen.
 * Fixiert per Default (Konvention). Entsperren über das Schloss-Symbol im Fenstertitel oder `/qp unlock`; dann per Titel-Drag verschiebbar, Position in `db.pos`.
-* **Größe: 720 × 660 px.** Titelleiste 32 px + Werkzeugleiste 40 px + 20 Zeilen × 28 px + Fußzeile 28 px (Hinweis auf Shift-/Linksklick). Ein volles Log (20 Quests) ist ohne Scrollen sichtbar; bei mehr Einträgen Scrollen per Mausrad (`FauxScrollFrame`-Prinzip, eigener Offset). Die ältere Konzeptangabe 720 × 480 passte nur ~14 Zeilen und ist ersetzt.
+* **Größe: 720 × 660 px.** Die Liste nutzt einen 560 px hohen sichtbaren Bereich. Questzeilen sind mindestens 28 px hoch und wachsen mit dem umgebrochenen Zieltext; dezente Überschriften belegen 20 px. Das Mausrad scrollt über Einträge, die nicht mehr vollständig hineinpassen. Extrem hohe Einträge werden auf den sichtbaren Bereich begrenzt; der Tooltip zeigt weiterhin alle Ziele.
 
 ### 5.2 Titel- und Werkzeugleiste
 
@@ -163,10 +164,10 @@ OnShow ──► dirty? ──► Refresh() sofort                              
 ```
 
 * **Kapazität:** `numQuests / max`; Farbe weiß < max − 2, gelb ab max − 2, rot ab max. `max` aus `C_QuestLog.GetMaxNumQuestsCanAccept()`, Fallback 20.
-* **Sortierung:** Dropdown oder Klick-Zyklus (einfacher, kein `UIDropDownMenu` nötig → **Zyklus-Button** gewählt). Tiebreaker immer Titel.
-  * `level`: Level aufsteigend
-  * `zone`: Zone, dann Level
-  * `progress`: Fortschritt aufsteigend (abgabebereit ans Ende)
+* **Sortierung:** Klick-Zyklus; die gefilterten Quests werden in Abschnitten mit eigenen, mitscrollenden Überschriften angezeigt. Überschriften belegen Listenzeilen.
+  * `level`: Schwierigkeitsfarbe des Clients (Grau bis Rot, sonst unbekannt), innerhalb der Gruppe Level und Titel
+  * `zone`: Gebiet, dann Level und Titel; das Gebiet entfällt in den einzelnen Zeilen
+  * `progress`: unberührt, in Arbeit, unbekannt, abgabebereit, fehlgeschlagen; innerhalb der Gruppe Fortschritt und Titel
 * **Filter:** Einzelauswahl (Segmentleiste), Zustand in `db.filter`.
   * `lowvalue`: Schwierigkeit `trivial` oder grün (siehe § 3.1)
   * `untouched`: `untouched == true`
@@ -174,21 +175,21 @@ OnShow ──► dirty? ──► Refresh() sofort                              
   * `complete`: `state == "complete"`
 * Kein Bulk-Button (siehe § 1).
 
-### 5.3 Zeile (Pool, 28 px)
+### 5.3 Zeile (Pool, mindestens 28 px)
 
 Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster bei 720 px:
 
 | # | Block | Breite | Element |
 | --- | --- | --- | --- |
-| 1 | Level-Badge | 40 | FontString `[18+]`, Schwierigkeitsfarbe; Suffix `+` Elite, `D` Dungeon, `R` Raid, `P` PvP |
+| 1 | Level-Badge | 60 | Level in Schwierigkeitsfarbe und eigenes Symbol für Gruppen-/Elite-, Dungeon- oder PvP-Quest |
 | 2 | Titel / Zone | 210 | zwei FontStrings (12 px / 10 px grau) |
-| 3 | Status | 170 | Badge `Fertig` / `Fehlgeschlagen` (Häkchen/Kreuz als Textur, nicht als Glyph, § 8) oder kompakter Fortschritt der offenen Ziele `4/10 Banditen, 0/1 Kopf` (gekürzt mit `…`) |
+| 3 | Status | 220 | Badge `Fertig` / `Fehlgeschlagen` oder offene Ziele untereinander; lange Ziele werden umgebrochen |
 | 4 | Rewards | 160 | bis zu 3 Item-Buttons 20×20 mit Qualitätsrahmen + `+N`, rechts davon Gold (oben) und XP (unten) |
 | A | Aktionen | 100 | Schützen, Auge, Teilen, Papierkorb (je 20×20) |
 
 * Das Schloss ist ein Element der Aktionsspalte, kein eigener Informationsblock.
 * Unberührte Quests (`untouched`): Blöcke 1–4 mit Alpha 0.55, Aktionen bleiben voll sichtbar.
-* Geschützte Quests: Papierkorb ausgeblendet, Schloss-Icon aktiv (goldfarben).
+* Geschützte Quests: Papierkorb ausgeblendet, Schloss-Icon aktiv (goldfarben). Schützen und Abbrechen zeigen Symbol und Text; die Fenstersperre im Titel ist ein Schloss-Symbol mit Tooltip.
 * Scharfgeschalteter Papierkorb: wird zu einem roten Button `Sicher?`, der nach links über Auge und Teilen wächst; Zeile leicht rot hinterlegt.
 * Gerade Zeilen leicht hinterlegt für Lesbarkeit.
 

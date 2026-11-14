@@ -14,22 +14,24 @@ Das Standard-Questlog zwingt zu ständigem Klicken zwischen linker Liste und rec
 
 ![Mock: volles Log mit 19 Quests, Tooltips und Legende](assets/mock.svg)
 
-Das Fenster nutzt ein kompaktes Listen-Layout (**720 × 660 px**), in dem jede aktive Quest exakt **eine Zeile** (28 px Höhe) belegt. So ist ein volles Log mit 20 Quests ohne Scrollen sichtbar; nur wenn mehr Einträge vorhanden sind, scrollt die Liste per Mausrad. Das Fenster ist standardmäßig fixiert und lässt sich über das Schloss-Symbol im Fenstertitel (oder `/qp unlock`) entsperren und verschieben. `ESC` schließt es.
+Das Fenster nutzt ein kompaktes Listen-Layout (**720 × 660 px**). Jede Quest hat eine Zeile von mindestens 28 px Höhe, die sich für mehrere oder umgebrochene Ziele vergrößert; jedes offene Ziel steht in einer eigenen Textzeile. Abschnittsüberschriften und Questzeilen scrollen per Mausrad, sobald sie nicht mehr ins Fenster passen. Das Fenster ist standardmäßig fixiert und lässt sich über das Schloss-Symbol im Fenstertitel (oder `/qp unlock`) entsperren und verschieben. `ESC` schließt es.
+
+Die Gestaltung orientiert sich am klassischen WoW-Interface: dunkle warme Braun- und Goldtöne, eingefasste Bedienelemente, Blizzard-Schriften und ein dezenter Rahmen. Questzeilen bleiben dabei gut lesbar und Aktionszustände klar erkennbar.
 
 **Header-Bar (Überblick & Schnellfilter)**
 
 * **Kapazitäts-Indikator:** Prominente Anzeige `19 / 20 Quests`. Färbt sich ab *Maximum − 2* gelb und beim Maximum rot. Das Maximum kommt vom Client, Fallback 20.
-* **Sortier-Umschalter:** Ein Klick-Zyklus-Button. Standard ist *Level (aufsteigend)*, damit veraltete Quests sofort ganz oben stehen; alternativ *Zone* oder *Fortschritt*. Bei Gleichstand wird nach Titel sortiert.
+* **Sortier-Umschalter:** Ein Klick-Zyklus-Button mit Abschnittsüberschriften. Standard ist *Level*, gruppiert nach den Schwierigkeitsfarben des Clients; alternativ *Zone* (Gebietsname als Überschrift statt wiederholt pro Quest) oder *Fortschritt* (unberührt, in Arbeit, unbekannt, abgabebereit, fehlgeschlagen). Überschriften belegen Listenzeilen und werden mitgescrollt.
 * **Schnellfilter (Einzelauswahl):** *Alle*, *Grau/Grün*, *0 %*, *Gruppe/Dungeon*, *Abgabebereit*.
 
 **Die Quest-Zeile (4 Informationsblöcke + Aktionsspalte, von links nach rechts)**
 
-1. **Level & Typ-Badge:** `[18+]` oder `[24D]`, eingefärbt in der Schwierigkeitsfarbe (`GetQuestDifficultyColor`: Grau, Grün, Gelb, Orange, Rot), mit Suffix für Elite (`+`), Dungeon (`D`), Raid (`R`) oder PvP (`P`).
+1. **Level & Typ-Badge:** Das Level wird in der Schwierigkeitsfarbe (`GetQuestDifficultyColor`) angezeigt; daneben markieren Symbole Gruppen-/Elite-, Dungeon- und PvP-Quests. Ein Tooltip erläutert den Typ.
 2. **Quest-Titel & Zone:** Titel in Hauptschrift, direkt darunter dezent ausgegraut die Zone (z. B. *Rotkammgebirge*). Hover über den Titel zeigt Questbeschreibung und alle Ziele im Tooltip.
 3. **Status & offene Aufgaben:**
    * *Abgabebereit:* grünes Badge mit Häkchen `Fertig`
    * *Fehlgeschlagen:* rotes Badge mit Kreuz `Fehlgeschlagen`
-   * *In Arbeit:* komprimierter Fortschritt der **offenen** Ziele direkt in der Zeile, z. B. `4/10 Banditen, 0/1 Kopf`. Hover listet alle Einzelziele untereinander auf, erledigte in Grün.
+   * *In Arbeit:* die **offenen** Ziele stehen untereinander in der Questzeile, z. B. `4/10 Banditen` und darunter `0/1 Kopf`. Hover listet alle Einzelziele auf, erledigte in Grün.
    * Häkchen und Kreuz sind Client-Texturen, keine Schriftzeichen (die Spielschrift enthält ✓/✗ nicht verlässlich).
    * Unberührte Quests (`0 %`) werden dezent gedimmt, da hier beim Abbrechen kein Fortschritt verloren geht.
 4. **Rewards auf einen Blick:**
@@ -40,11 +42,11 @@ Rechts schließt die **Aktionsspalte** an (Abschnitt 3). Das Schloss zum Schütz
 
 ### 3. Actions pro Quest (Rechte Aktionsspalte)
 
-Jede Zeile besitzt rechtsbündig eine feste Icon-Leiste (Schützen, Tracking, Teilen, Abbrechen) für sofortige Interaktion ohne Untermenüs. Dazu kommen zwei Klicks auf die Zeile selbst.
+Jede Zeile besitzt rechtsbündig Aktionen für sofortige Interaktion ohne Untermenüs. Schützen und Abbrechen zeigen jeweils Symbol und Beschriftung; die Fenstersperre im Titel verwendet ein einzelnes Schloss-Symbol.
 
 | Action | Trigger | Verhalten & Sicherheitsnetz |
 | --- | --- | --- |
-| **Abbrechen (Papierkorb)** | Linksklick | *Unberührt (`0 %`) oder fehlgeschlagen:* 1 Klick bricht sofort ab, denn es geht nichts verloren. *Teilfortschritt (z. B. `7/10`) oder abgabebereit:* Der 1. Klick färbt den Button für 3 Sekunden rot (`Sicher?`), erst der 2. Klick bricht ab. `Shift + Klick` bricht in jedem Zustand sofort ab. Es gibt kein Modal-Popup. |
+| **Abbrechen (Ablehnen-Symbol)** | Linksklick | *Unberührt (`0 %`) oder fehlgeschlagen:* 1 Klick bricht sofort ab, denn es geht nichts verloren. *Teilfortschritt (z. B. `7/10`) oder abgabebereit:* Der 1. Klick färbt den Button für 3 Sekunden rot (`Sicher?`), erst der 2. Klick bricht ab. `Shift + Klick` bricht in jedem Zustand sofort ab. Es gibt kein Modal-Popup. |
 | **Schützen (Schloss)** | Linksklick | Speichert die `questID` in den SavedVariables und blendet den Papierkorb dieser Zeile aus, bis der Schutz wieder aufgehoben wird. Gedacht für lange Klassenquests oder Dungeon-Vorquests, die grau/grün sind, aber keinesfalls gelöscht werden dürfen. |
 | **Tracking (Auge)** | Linksklick | Fügt die Quest über `C_QuestLog.AddQuestWatch` dem On-Screen-Tracker hinzu oder entfernt sie (`RemoveQuestWatch`), um auch den Bildschirm schnell aufzuräumen. |
 | **Teilen** | Linksklick | Teilt die Quest mit der Gruppe. Nur aktiv, wenn `C_QuestLog.IsPushableQuest(questID)` zutrifft und man in einer Gruppe ist; sonst ausgegraut. |
