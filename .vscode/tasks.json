@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install QuestPruneForever for testing",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}/tools/install.py", "${input:addonsPath}"],
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "addonsPath",
+      "type": "promptString",
+      "description": "Path to World of Warcraft/_forever_/Interface/AddOns"
+    }
+  ]
+}

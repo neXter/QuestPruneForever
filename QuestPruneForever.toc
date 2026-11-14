@@ -1,0 +1,9 @@
+## Interface: 16001
+## Title: QuestPruneForever
+## Notes: Flat quest log triage and diagnostics
+## Notes-deDE: Flache Questlog-Übersicht und Diagnose
+## Author: neXter
+## Version: 0.2.0
+## SavedVariables: QuestPruneForeverDB
+
+QuestPruneForever.lua

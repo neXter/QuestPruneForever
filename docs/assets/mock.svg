@@ -1,0 +1,439 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 724" font-family="Segoe UI, Arial, sans-serif">
+<defs>
+  <symbol id="i-lock" viewBox="0 0 20 20"><path d="M7 9V6.8a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="5" y="9" width="10" height="7.5" rx="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 20 20"><path d="M2.5 10Q10 3.5 17.5 10Q10 16.5 2.5 10Z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="10" r="2.4" fill="currentColor"/></symbol>
+  <symbol id="i-share" viewBox="0 0 20 20"><circle cx="14.5" cy="5.5" r="2.2" fill="currentColor"/><circle cx="5.5" cy="10" r="2.2" fill="currentColor"/><circle cx="14.5" cy="14.5" r="2.2" fill="currentColor"/><path d="M14.5 5.5L5.5 10L14.5 14.5" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 20 20"><path d="M4.5 5.5h11M8 5.5V4h4v1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 7h8l-.8 9.5H6.8Z" fill="currentColor"/><path d="M8.6 9v5.5M11.4 9v5.5" stroke="#1a1c24" stroke-width="1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 12 12"><path d="M2 6.5L5 9.5L10.5 2.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 12 12"><path d="M2.5 2.5L9.5 9.5M9.5 2.5L2.5 9.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 20 20"><path d="M5.5 5.5L14.5 14.5M14.5 5.5L5.5 14.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5"><circle cx="5" cy="5" r="4" fill="#c8b070"/></marker>
+</defs>
+<rect width="1060" height="724" fill="#2a2f2a"/>
+<text x="20" y="28" font-size="15" fill="#e8e0c8" font-weight="700">QuestPruneForever – Mock</text>
+<text x="222" y="28" font-size="12" fill="#a8a8a0">Filter: Alle · Sortierung: Level · Spielerstufe 24 · 720 × 660 px</text>
+<g transform="translate(20,44)">
+<rect width="720" height="660" rx="6" fill="#121419" fill-opacity="0.96" stroke="#6b5c3e" stroke-width="1.5"/>
+<rect x="1" y="1" width="718" height="30" rx="5" fill="#1d1a14"/>
+<text x="12" y="21" font-size="14" fill="#ffd100" font-weight="700">QuestPrune</text>
+<text x="104" y="21" font-size="14" fill="#ffff00" font-weight="700">19 / 20 Quests</text>
+<text x="214" y="21" font-size="11" fill="#777">(gelb ab 18, rot bei 20)</text>
+<use href="#i-lock" x="666" y="6" width="18" height="18" color="#8a8270"/>
+<use href="#i-close" x="692" y="6" width="18" height="18" color="#c8c0a8"/>
+<rect x="10" y="38" width="132" height="22" rx="3" fill="#22242c" stroke="#3c3e48"/>
+<text x="76.0" y="53" font-size="11.5" fill="#c8c8c8" text-anchor="middle">Sortierung: Level ▲</text>
+<text x="156" y="53" font-size="11.5" fill="#888">Filter:</text>
+<rect x="194" y="38" width="42" height="22" rx="3" fill="#4a3c1c" stroke="#c8a040"/>
+<text x="215.0" y="53" font-size="11.5" fill="#ffd100" font-weight="600" text-anchor="middle">Alle</text>
+<rect x="239" y="38" width="74" height="22" rx="3" fill="#22242c" stroke="#3c3e48"/>
+<text x="276.0" y="53" font-size="11.5" fill="#c8c8c8" text-anchor="middle">Grau/Grün</text>
+<rect x="316" y="38" width="38" height="22" rx="3" fill="#22242c" stroke="#3c3e48"/>
+<text x="335.0" y="53" font-size="11.5" fill="#c8c8c8" text-anchor="middle">0 %</text>
+<rect x="357" y="38" width="104" height="22" rx="3" fill="#22242c" stroke="#3c3e48"/>
+<text x="409.0" y="53" font-size="11.5" fill="#c8c8c8" text-anchor="middle">Gruppe/Dungeon</text>
+<rect x="464" y="38" width="98" height="22" rx="3" fill="#22242c" stroke="#3c3e48"/>
+<use href="#i-check" x="472" y="43" width="12" height="12" color="#40c040"/>
+<text x="488" y="53" font-size="11.5" fill="#c8c8c8">Abgabebereit</text>
+<line x1="8" y1="67" x2="712" y2="67" stroke="#3a3428"/>
+<g opacity="0.55">
+<text x="10" y="90" font-size="12" fill="#9d9d9d" font-weight="700">[12]</text>
+<text x="54" y="84" font-size="12" fill="#f0e6c8" font-weight="600">Verlorene Vorratskiste</text>
+<text x="54" y="96" font-size="10" fill="#8a8a8a">Westfall</text>
+<text x="266" y="90" font-size="11" fill="#d0d0d0">0/1 Kiste</text>
+<text x="598" y="84" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">12</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="96" font-size="10" fill="#9ab4e0" text-anchor="end">420 XP</text>
+</g>
+<rect x="612" y="76" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="78" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="76" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="78" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="76" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="78" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="684" y="76" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="78" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="100" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="0.55">
+<text x="10" y="118" font-size="12" fill="#9d9d9d" font-weight="700">[13]</text>
+<text x="54" y="112" font-size="12" fill="#f0e6c8" font-weight="600">Wolfsfelle für den Gerber</text>
+<text x="54" y="124" font-size="10" fill="#8a8a8a">Westfall</text>
+<text x="266" y="118" font-size="11" fill="#d0d0d0">0/8 Wolfsfell</text>
+<rect x="438" y="104" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M443 119L453 109M450 109h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="112" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">15</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="124" font-size="10" fill="#9ab4e0" text-anchor="end">450 XP</text>
+</g>
+<rect x="612" y="104" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="106" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="104" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="106" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="104" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="106" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="104" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="106" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="1">
+<text x="10" y="146" font-size="12" fill="#9d9d9d" font-weight="700">[14]</text>
+<text x="54" y="140" font-size="12" fill="#f0e6c8" font-weight="600">Brief an den Hauptmann</text>
+<text x="54" y="152" font-size="10" fill="#8a8a8a">Westfall</text>
+<rect x="266" y="134" width="62" height="16" rx="8" fill="#1d4a20" stroke="#40a040"/>
+<use href="#i-check" x="272" y="136" width="12" height="12" color="#7cfc7c"/>
+<text x="287" y="146" font-size="11" fill="#9cfc9c" font-weight="600">Fertig</text>
+<text x="598" y="140" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">8</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="152" font-size="10" fill="#9ab4e0" text-anchor="end">300 XP</text>
+</g>
+<rect x="612" y="132" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="134" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="132" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="134" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="132" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="134" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="684" y="132" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="134" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="156" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="0.55">
+<text x="10" y="174" font-size="12" fill="#9d9d9d" font-weight="700">[15]</text>
+<text x="54" y="168" font-size="12" fill="#f0e6c8" font-weight="600">Ärger mit Murlocs</text>
+<text x="54" y="180" font-size="10" fill="#8a8a8a">Westfall</text>
+<text x="266" y="174" font-size="11" fill="#d0d0d0">0/10 Murlocs</text>
+<rect x="438" y="160" width="20" height="20" rx="2" fill="#2e4636" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 175L453 165M450 165h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="160" width="20" height="20" rx="2" fill="#4e3a3a" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M465 175L475 165M472 165h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="168" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="180" font-size="10" fill="#9ab4e0" text-anchor="end">600 XP</text>
+</g>
+<rect x="612" y="160" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="162" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="160" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="162" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="160" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="162" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="160" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="162" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="1">
+<text x="10" y="202" font-size="12" fill="#9d9d9d" font-weight="700">[16]</text>
+<text x="54" y="196" font-size="12" fill="#f0e6c8" font-weight="600">Prüfung des Kriegers</text>
+<text x="54" y="208" font-size="10" fill="#8a8a8a">Loch Modan</text>
+<text x="266" y="202" font-size="11" fill="#d0d0d0">2/3 Prüfungen</text>
+<rect x="438" y="188" width="20" height="20" rx="2" fill="#4e3a3a" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M443 203L453 193M450 193h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="208" font-size="10" fill="#9ab4e0" text-anchor="end">800 XP</text>
+</g>
+<rect x="612" y="188" width="20" height="20" rx="3" fill="#f0c040" fill-opacity="0.18" stroke="#f0c040" stroke-opacity="0.6"/>
+<use href="#i-lock" x="614" y="190" width="16" height="16" color="#f0c040" opacity="1.0"/>
+<rect x="636" y="188" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="190" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="188" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="190" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="4" y="212" width="712" height="28" fill="#ffffff" fill-opacity="0.09"/>
+<g opacity="1">
+<text x="10" y="230" font-size="12" fill="#40c040" font-weight="700">[17]</text>
+<text x="54" y="224" font-size="12" fill="#f0e6c8" font-weight="600">Banditenkopfgeld</text>
+<text x="54" y="236" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<text x="266" y="230" font-size="11" fill="#d0d0d0">4/10 Banditen, 0/1 Kopf</text>
+<rect x="438" y="216" width="20" height="20" rx="2" fill="#3a4450" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 231L453 221M450 221h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="216" width="20" height="20" rx="2" fill="#4a3a28" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M465 231L475 221M472 221h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="224" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">45</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="236" font-size="10" fill="#9ab4e0" text-anchor="end">1.4k XP</text>
+</g>
+<rect x="612" y="216" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="218" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="216" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="218" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="216" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="218" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="216" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="218" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="0.55">
+<text x="10" y="258" font-size="12" fill="#40c040" font-weight="700">[18+]</text>
+<text x="54" y="252" font-size="12" fill="#f0e6c8" font-weight="600">Festung der Oger</text>
+<text x="54" y="264" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<text x="266" y="258" font-size="11" fill="#d0d0d0">0/1 Ogerhäuptling</text>
+<rect x="438" y="244" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M443 259L453 249M450 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="244" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M465 259L475 249M472 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="482" y="244" width="20" height="20" rx="2" fill="#3e2e46" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M487 259L497 249M494 249h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="252" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">10</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="264" font-size="10" fill="#9ab4e0" text-anchor="end">2.1k XP</text>
+</g>
+<rect x="612" y="244" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="246" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="244" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="246" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="244" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="246" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="244" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="246" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="268" width="712" height="28" fill="#ff3030" fill-opacity="0.08"/>
+<g opacity="1">
+<text x="10" y="286" font-size="12" fill="#40c040" font-weight="700">[19]</text>
+<text x="54" y="280" font-size="12" fill="#f0e6c8" font-weight="600">Spinnenseide</text>
+<text x="54" y="292" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<text x="266" y="286" font-size="11" fill="#d0d0d0">6/8 Spinnenseide</text>
+<rect x="438" y="272" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 287L453 277M450 277h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="280" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">30</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="292" font-size="10" fill="#9ab4e0" text-anchor="end">1.2k XP</text>
+</g>
+<rect x="612" y="272" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="274" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="272" width="72" height="20" rx="3" fill="#b01c1c" stroke="#ff6060"/>
+<use href="#i-trash" x="639" y="274" width="16" height="16" color="#fff"/>
+<text x="658" y="286" font-size="11" fill="#fff" font-weight="700">Sicher?</text>
+<g opacity="1">
+<text x="10" y="314" font-size="12" fill="#40c040" font-weight="700">[20]</text>
+<text x="54" y="308" font-size="12" fill="#f0e6c8" font-weight="600">Eskorte nach Seenhain</text>
+<text x="54" y="320" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<rect x="266" y="302" width="98" height="16" rx="8" fill="#4a1d1d" stroke="#a04040"/>
+<use href="#i-cross" x="272" y="304" width="12" height="12" color="#ff7070"/>
+<text x="287" y="314" font-size="11" fill="#ff9090" font-weight="600">Fehlgeschlagen</text>
+<rect x="438" y="300" width="20" height="20" rx="2" fill="#3e2e46" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 315L453 305M450 305h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="308" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">40</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="320" font-size="10" fill="#9ab4e0" text-anchor="end">1.5k XP</text>
+</g>
+<rect x="612" y="300" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="302" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="300" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="302" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="300" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="302" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="684" y="300" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="302" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="324" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="1">
+<text x="10" y="342" font-size="12" fill="#40c040" font-weight="700">[21]</text>
+<text x="54" y="336" font-size="12" fill="#f0e6c8" font-weight="600">Gnollplage</text>
+<text x="54" y="348" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<text x="266" y="342" font-size="11" fill="#d0d0d0">12/15 Gnolle</text>
+<text x="598" y="336" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="348" font-size="10" fill="#9ab4e0" text-anchor="end">1.6k XP</text>
+</g>
+<rect x="612" y="328" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="330" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="328" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="330" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="328" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="330" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="328" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="330" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="1">
+<text x="10" y="370" font-size="12" fill="#ffff00" font-weight="700">[22]</text>
+<text x="54" y="364" font-size="12" fill="#f0e6c8" font-weight="600">Schatten im Dämmerwald</text>
+<text x="54" y="376" font-size="10" fill="#8a8a8a">Dämmerwald</text>
+<text x="266" y="370" font-size="11" fill="#d0d0d0">1/5 Seelensteine</text>
+<rect x="438" y="356" width="20" height="20" rx="2" fill="#4e3a3a" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 371L453 361M450 361h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="356" width="20" height="20" rx="2" fill="#3a4450" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M465 371L475 361M472 361h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="364" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">55</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="376" font-size="10" fill="#9ab4e0" text-anchor="end">1.8k XP</text>
+</g>
+<rect x="612" y="356" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="358" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="356" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="358" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="356" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="358" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="356" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="358" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="380" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="0.55">
+<text x="10" y="398" font-size="12" fill="#ffff00" font-weight="700">[23]</text>
+<text x="54" y="392" font-size="12" fill="#f0e6c8" font-weight="600">Der verfluchte Friedhof</text>
+<text x="54" y="404" font-size="10" fill="#8a8a8a">Dämmerwald</text>
+<text x="266" y="398" font-size="11" fill="#d0d0d0">0/12 Ghule</text>
+<rect x="438" y="384" width="20" height="20" rx="2" fill="#3a4450" stroke="#ffffff" stroke-width="1.5"/>
+<path d="M443 399L453 389M450 389h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="392" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">60</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="404" font-size="10" fill="#9ab4e0" text-anchor="end">1.9k XP</text>
+</g>
+<rect x="612" y="384" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="386" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="384" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="386" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="384" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="386" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="384" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="386" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="0.55">
+<text x="10" y="426" font-size="12" fill="#ffff00" font-weight="700">[24D]</text>
+<text x="54" y="420" font-size="12" fill="#f0e6c8" font-weight="600">Tief in den Minen</text>
+<text x="54" y="432" font-size="10" fill="#8a8a8a">Die Todesminen</text>
+<text x="266" y="426" font-size="11" fill="#d0d0d0">0/1 Anführer, 0/1 Notizbuch</text>
+<rect x="438" y="412" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M443 427L453 417M450 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="412" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M465 427L475 417M472 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="482" y="412" width="20" height="20" rx="2" fill="#3e2e46" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M487 427L497 417M494 417h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="504" y="426" font-size="10" fill="#bbb">+1</text>
+<text x="598" y="420" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan></tspan></text>
+<text x="598" y="432" font-size="10" fill="#9ab4e0" text-anchor="end">2.6k XP</text>
+</g>
+<rect x="612" y="412" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="414" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="412" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="414" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="412" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="414" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="412" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="414" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="436" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="1">
+<text x="10" y="454" font-size="12" fill="#ffff00" font-weight="700">[24]</text>
+<text x="54" y="448" font-size="12" fill="#f0e6c8" font-weight="600">Nachricht für Seenhain</text>
+<text x="54" y="460" font-size="10" fill="#8a8a8a">Rotkammgebirge</text>
+<rect x="266" y="442" width="62" height="16" rx="8" fill="#1d4a20" stroke="#40a040"/>
+<use href="#i-check" x="272" y="444" width="12" height="12" color="#7cfc7c"/>
+<text x="287" y="454" font-size="11" fill="#9cfc9c" font-weight="600">Fertig</text>
+<rect x="438" y="440" width="20" height="20" rx="2" fill="#2e3e4e" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 455L453 445M450 445h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="448" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="460" font-size="10" fill="#9ab4e0" text-anchor="end">1.2k XP</text>
+</g>
+<rect x="612" y="440" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="442" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="440" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="442" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="440" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="442" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="684" y="440" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="442" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="1">
+<text x="10" y="482" font-size="12" fill="#ffff00" font-weight="700">[25]</text>
+<text x="54" y="476" font-size="12" fill="#f0e6c8" font-weight="600">Raptorenjagd</text>
+<text x="54" y="488" font-size="10" fill="#8a8a8a">Sumpfland</text>
+<text x="266" y="482" font-size="11" fill="#d0d0d0">3/9 Raptorkrallen</text>
+<rect x="438" y="468" width="20" height="20" rx="2" fill="#1a1c24" stroke="#777" stroke-dasharray="3 2"/>
+<text x="448" y="482.5" font-size="12" fill="#aaa" font-weight="700" text-anchor="middle">?</text>
+<text x="598" y="476" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">65</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="488" font-size="10" fill="#9ab4e0" text-anchor="end">2.0k XP</text>
+</g>
+<rect x="612" y="468" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="470" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="468" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="470" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="468" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="470" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="468" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="470" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="492" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="1">
+<text x="10" y="510" font-size="12" fill="#ffff00" font-weight="700">[26]</text>
+<text x="54" y="504" font-size="12" fill="#f0e6c8" font-weight="600">Die Dunkeleisenzwerge</text>
+<text x="54" y="516" font-size="10" fill="#8a8a8a">Sumpfland</text>
+<text x="266" y="510" font-size="11" fill="#d0d0d0">5/10 Zwerge</text>
+<rect x="438" y="496" width="20" height="20" rx="2" fill="#2e4636" stroke="#1eff00" stroke-width="1.5"/>
+<path d="M443 511L453 501M450 501h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="504" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">70</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="516" font-size="10" fill="#9ab4e0" text-anchor="end">2.2k XP</text>
+</g>
+<rect x="612" y="496" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="498" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="496" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="498" width="16" height="16" color="#e8e0c8" opacity="1"/>
+<rect x="660" y="496" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="498" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="496" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="498" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="0.55">
+<text x="10" y="538" font-size="12" fill="#ff8040" font-weight="700">[27]</text>
+<text x="54" y="532" font-size="12" fill="#f0e6c8" font-weight="600">Vergiftetes Wasser</text>
+<text x="54" y="544" font-size="10" fill="#8a8a8a">Sumpfland</text>
+<text x="266" y="538" font-size="11" fill="#d0d0d0">0/6 Wasserproben</text>
+<text x="598" y="532" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">75</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="544" font-size="10" fill="#9ab4e0" text-anchor="end">2.4k XP</text>
+</g>
+<rect x="612" y="524" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="526" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="524" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="526" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="524" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="526" width="16" height="16" color="#c8c0a8" opacity="0.25"/>
+<rect x="684" y="524" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="526" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<rect x="4" y="548" width="712" height="28" fill="#ffffff" fill-opacity="0.03"/>
+<g opacity="0.55">
+<text x="10" y="566" font-size="12" fill="#ff8040" font-weight="700">[28D]</text>
+<text x="54" y="560" font-size="12" fill="#f0e6c8" font-weight="600">Der Fluch von Schattenfang</text>
+<text x="54" y="572" font-size="10" fill="#8a8a8a">Burg Schattenfang</text>
+<text x="266" y="566" font-size="11" fill="#d0d0d0">0/1 Erzmagier</text>
+<rect x="438" y="552" width="20" height="20" rx="2" fill="#3a4450" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M443 567L453 557M450 557h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<rect x="460" y="552" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M465 567L475 557M472 557h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="560" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">20</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="572" font-size="10" fill="#9ab4e0" text-anchor="end">3.0k XP</text>
+</g>
+<rect x="612" y="552" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="554" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="552" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="554" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="552" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="554" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="552" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="554" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<g opacity="0.55">
+<text x="10" y="594" font-size="12" fill="#ff1a1a" font-weight="700">[30+]</text>
+<text x="54" y="588" font-size="12" fill="#f0e6c8" font-weight="600">Trollhauer</text>
+<text x="54" y="600" font-size="10" fill="#8a8a8a">Sumpfland</text>
+<text x="266" y="594" font-size="11" fill="#d0d0d0">0/8 Hauer</text>
+<rect x="438" y="580" width="20" height="20" rx="2" fill="#4a3a28" stroke="#0070dd" stroke-width="1.5"/>
+<path d="M443 595L453 585M450 585h3v3" stroke="#e8dcc0" stroke-opacity="0.55" stroke-width="1.6" fill="none"/>
+<text x="598" y="588" font-size="10.5" fill="#fff" text-anchor="end"><tspan><tspan fill="#eee">1</tspan><tspan fill="#ffd100">g</tspan> <tspan fill="#eee">50</tspan><tspan fill="#c7c7cf">s</tspan></tspan></text>
+<text x="598" y="600" font-size="10" fill="#9ab4e0" text-anchor="end">3.4k XP</text>
+</g>
+<rect x="612" y="580" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-lock" x="614" y="582" width="16" height="16" color="#c8c0a8" opacity="0.35"/>
+<rect x="636" y="580" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-eye" x="638" y="582" width="16" height="16" color="#c8c0a8" opacity="0.3"/>
+<rect x="660" y="580" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-share" x="662" y="582" width="16" height="16" color="#c8c0a8" opacity="1"/>
+<rect x="684" y="580" width="20" height="20" rx="3" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+<use href="#i-trash" x="686" y="582" width="16" height="16" color="#e0d0c0" opacity="1.0"/>
+<line x1="8" y1="636" x2="712" y2="636" stroke="#3a3428"/>
+<text x="12" y="655" font-size="11" fill="#7a7a7a">Shift-Klick auf Zeile: Quest-Link in den Chat  ·  Klick auf Zeile: im Standard-Questlog öffnen</text>
+</g>
+<path d="M432 270L764 164" stroke="#c8b070" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-start="url(#dot)"/>
+<rect x="770" y="150" width="270" height="99" rx="4" fill="#0b0d18" fill-opacity="0.96" stroke="#6a6a7a"/>
+<text x="780" y="171" font-size="13" fill="#ffd100" font-weight="700">Banditenkopfgeld</text>
+<text x="780" y="188" font-size="11" fill="#aaa">Stufe 17 · Rotkammgebirge</text>
+<text x="780" y="205" font-size="11.5" fill="#fff">4/10 Banditen getötet</text>
+<text x="780" y="222" font-size="11.5" fill="#fff">0/1 Kopf des Anführers</text>
+<text x="780" y="239" font-size="11.5" fill="#40c040">1/1 Steckbrief gelesen</text>
+<path d="M728 326L764 344" stroke="#c8b070" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-start="url(#dot)"/>
+<rect x="770" y="330" width="270" height="99" rx="4" fill="#0b0d18" fill-opacity="0.96" stroke="#6a6a7a"/>
+<text x="780" y="351" font-size="13" fill="#ffd100" font-weight="700">Abbrechen: Spinnenseide</text>
+<text x="780" y="368" font-size="11.5" fill="#fff">Fortschritt 6/8 geht verloren.</text>
+<text x="780" y="385" font-size="11.5" fill="#ff7070" font-weight="600">Erneut klicken (3 s) zum Bestätigen.</text>
+<text x="780" y="402" font-size="11" fill="#aaa">Shift-Klick: sofort abbrechen</text>
+<text x="780" y="419" font-size="11.5" fill="#ffd100">Zerstört: [Leerer Seidenbeutel]</text>
+<path d="M728 130L764 74" stroke="#c8b070" stroke-width="1" stroke-dasharray="4 3" fill="none" marker-start="url(#dot)"/>
+<rect x="770" y="60" width="270" height="48" rx="4" fill="#0b0d18" fill-opacity="0.96" stroke="#6a6a7a"/>
+<text x="780" y="81" font-size="13" fill="#ffd100" font-weight="700">Abbrechen: Verlorene Vorratskiste</text>
+<text x="780" y="98" font-size="11.5" fill="#fff">Kein Fortschritt: 1 Klick bricht ab.</text>
+<rect x="770" y="490" width="270" height="214" rx="4" fill="#000" fill-opacity="0.25" stroke="#4a4a40"/>
+<text x="780" y="510" font-size="12.5" fill="#e8e0c8" font-weight="700">Legende</text>
+<rect x="780" y="520" width="10" height="10" fill="#9d9d9d"/>
+<text x="794" y="529" font-size="10.5" fill="#ccc">Grau</text>
+<rect x="831" y="520" width="10" height="10" fill="#40c040"/>
+<text x="845" y="529" font-size="10.5" fill="#ccc">Grün</text>
+<rect x="882" y="520" width="10" height="10" fill="#ffff00"/>
+<text x="896" y="529" font-size="10.5" fill="#ccc">Gelb</text>
+<rect x="933" y="520" width="10" height="10" fill="#ff8040"/>
+<text x="947" y="529" font-size="10.5" fill="#ccc">Orange</text>
+<rect x="984" y="520" width="10" height="10" fill="#ff1a1a"/>
+<text x="998" y="529" font-size="10.5" fill="#ccc">Rot</text>
+<text x="780" y="552.0" font-size="11" fill="#ccc">Badge-Suffix: + Elite · D Dungeon · R Raid · P PvP</text>
+<text x="780" y="570.5" font-size="11" fill="#ccc">Gedimmte Zeile: 0 % Fortschritt</text>
+<text x="780" y="589.0" font-size="11" fill="#ccc">Papierkorb: 0 % / fehlgeschlagen = 1 Klick,</text>
+<text x="780" y="607.5" font-size="11" fill="#ccc">    sonst 2 Klicks (Sicher?) oder Shift-Klick</text>
+<text x="780" y="626.0" font-size="11" fill="#ccc">Schloss gold: geschützt, Papierkorb weg</text>
+<text x="780" y="644.5" font-size="11" fill="#ccc">Auge hell: im Tracker · Teilen grau: nicht teilbar</text>
+<text x="780" y="663.0" font-size="11" fill="#ccc">Rahmen: Item-Qualität · ? = Daten laden</text>
+<text x="780" y="681.5" font-size="11" fill="#ccc">Rechts: Gold/Silber/Kupfer und XP</text>
+</svg>

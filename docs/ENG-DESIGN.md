@@ -1,0 +1,324 @@
+# QuestPruneForever – Engineering Design (Entwurf)
+
+Stand: 2026-11-14 · Basis: [CONCEPT.md](CONCEPT.md) · Ziel-Client: WoW Forever (`## Interface: 16001`)
+
+Dieses Dokument beschreibt, *wie* das Konzept umgesetzt wird: Dateien, Datenmodell, Refresh-Pipeline, UI-Aufbau, Aktionen und Test ohne Spiel. Unbestätigte Client-Details stehen mit Fallback unter [Offene Fragen](#9-offene-fragen--risiken).
+
+---
+
+## 1. Scope
+
+**In 1.0:** Fenster mit flacher Questliste, Header (Kapazität, Sortierung, Filter), per Klick ins Standard-Log, pro Zeile Badge/Titel/Zone/Status/Rewards und Aktionen (Schützen, Tracking, Teilen, Abbrechen), Shift-Klick-Chatlink, Reward-Caching, Debug/Dump.
+
+**Bewusst nie:** Massenaktionen (mehrere Quests auf einmal abbrechen). Jede Quest wird einzeln abgebrochen (Konzept, Grundsatz „volle Kontrolle“).
+
+**Nicht in 1.0:** Questtext lesen im Add-on (nur Tooltip), Optionen-Panel, Account-weite Statistiken, Wiederannehmen abgebrochener Quests.
+
+Mock: [assets/mock.svg](assets/mock.svg)
+
+---
+
+## 2. Dateien & Grundgerüst
+
+```
+QuestPruneForever/
+  QuestPruneForever.toc
+  QuestPruneForever.lua      -- eine Datei, in Abschnitte gegliedert (s. u.)
+  Icons/icon.tga             -- 64×64, unkomprimiert
+```
+
+TOC:
+
+```
+## Interface: 16001
+## Title: QuestPruneForever
+## Notes: Flat quest log triage: see and abandon low-value quests in one click
+## Notes-deDE: Flache Questlog-Übersicht: wertlose Quests erkennen und per Klick abbrechen
+## Author: neXter
+## Version: 0.1.0
+## SavedVariables: QuestPruneForeverDB
+## IconTexture: Interface\AddOns\QuestPruneForever\Icons\icon
+```
+
+Eine Lua-Datei (wie FriendsListList), geschätzt 1.000–1.300 Zeilen. Abschnitte in dieser Reihenfolge, jeweils `local`:
+
+| Abschnitt | Inhalt |
+| --- | --- |
+| Locale | `L`-Tabelle, `GetLocale() == "deDE"` → Deutsch, sonst Englisch |
+| Util | `Print`, `Dbg` (signaturgesteuert), `Has`, Formatierung Gold/XP (`45s`, `1.4k XP`) |
+| Compat | Kapselt alle unsicheren APIs hinter je einer Funktion mit Fallback (§ 8) |
+| Model | `Snapshot()` → Liste von Quest-Records (§ 3) |
+| Query | Filter + Sortierung → sichtbare Liste |
+| Actions | Abandon, Lock, Watch, Share, Link, OpenInLog |
+| UI | Hauptfenster, Header, Zeilen-Pool, Tooltips |
+| Refresh | Debounce, Dirty-Flag, Event-Handler |
+| Slash | `/qp`, `/questprune` |
+
+---
+
+## 3. Datenmodell
+
+### 3.1 Quest-Record (pro Refresh neu gebaut, nie persistiert)
+
+```lua
+{
+  questID      = 1234,
+  logIndex     = 7,              -- nur für APIs, die noch Index brauchen
+  title        = "Bandit Trouble",
+  level        = 18,
+  zone         = "Redridge Mountains", -- letzter Header über der Quest
+  tag          = { elite = true, dungeon = false, pvp = false, raid = false, group = 0 },
+  difficulty   = "trivial",      -- trivial|standard|difficult|verydifficult|impossible
+  state        = "active",       -- active|complete|failed
+  objectives   = { { text = "Bandits", have = 4, need = 10, done = false }, ... },
+  progress     = 0.4,            -- 0..1, Mittel über Objectives
+  untouched    = false,          -- progress == 0 und state == "active"
+  oneClick     = false,          -- untouched oder state == "failed"
+  rewards      = {
+    items   = { { itemID, texture, quality, count, choice = true|false, slot = i } },
+    money   = 4500,              -- Kupfer
+    xp      = 1400,
+    pending = false,             -- true solange Item-Daten fehlen
+  },
+  watched      = true,
+  pushable     = true,
+  locked       = false,          -- aus DB
+}
+```
+
+**Regeln:**
+
+* **Fortschritt:** Je Objective `min(have/need, 1)`; erledigte Objectives zählen als 1. `progress` = Mittelwert. Bei fehlenden Objectives oder unbekanntem Fortschritt ist der Wert unbekannt und der Abbruch bestätigungspflichtig.
+* **`untouched`** steuert das Dimmen der Zeile und den Filter „0 %“. Abgabebereite und fehlgeschlagene Quests sind nie `untouched`.
+* **`oneClick`** steuert den Papierkorb: unberührte und fehlgeschlagene Quests brechen mit 1 Klick ab (es geht nichts verloren), alle anderen brauchen „Sicher?“ oder Shift.
+* **Zone:** Beim Durchlauf über `C_QuestLog.GetNumQuestLogEntries()` merkt sich der Snapshot den letzten Eintrag mit `isHeader` als Zone. Versteckte Einträge (`isHidden`, `isTask`, `isBounty`) werden übersprungen.
+* **Schwierigkeit:** `GetQuestDifficultyColor(level)` liefert eine Farbtabelle; die Kategorie wird über Identität mit `QuestDifficultyColors[key]` bestimmt. Fallback: eigene Rechnung aus `UnitLevel("player")` und `GetQuestGreenRange()` (§ 8).
+
+### 3.2 SavedVariables `QuestPruneForeverDB`
+
+```lua
+QuestPruneForeverDB = {
+  version = 1,
+  pos     = { point, relPoint, x, y },
+  locked  = true,               -- Fenster fixiert (Konvention: standardmäßig gesperrt)
+  sort    = "level",            -- level|zone|progress
+  filter  = "all",              -- all|lowvalue|untouched|group|complete
+  debug   = false,
+  compat  = { },                -- per Slash gesetzte Fallback-Schalter (§ 8)
+  chars   = {
+    ["Realm-Name"] = { protected = { [questID] = true } },
+  },
+}
+```
+
+* Geschützte Quests sind **pro Charakter** gespeichert, da Quest-IDs charakterbezogen sind.
+* Aufräumen: Bei `QUEST_REMOVED`/`QUEST_TURNED_IN` wird die `questID` aus `protected` entfernt. Zusätzlich beim Login: Einträge, die nicht mehr im Log stehen, löschen.
+* Name nach Add-on-Konvention `<Name>DB` (frühere Konzeptfassung: `QuestPruneDB`).
+
+---
+
+## 4. Refresh-Pipeline
+
+```
+Event ──► MarkDirty() ──► (Fenster sichtbar?) ──► C_Timer.After(0.1) ──► Refresh()
+                                  │ nein                                   │
+                                  └─► dirty = true, nichts tun             ├─ Snapshot()
+                                                                           ├─ Query(filter, sort)
+OnShow ──► dirty? ──► Refresh() sofort                                     └─ Render()
+```
+
+* **Debounce:** Ein `pending`-Flag; das erste Event plant `C_Timer.After(0.1)`, weitere Events bis dahin werden verworfen. Kein Ticker, kein `OnUpdate`.
+* **Geschlossenes Fenster** verursacht keine Arbeit außer dem Setzen von `dirty`.
+* **Events** (registriert per `pcall`, wie in FriendsListList, fehlende Events werden im Debug gemeldet):
+
+| Event | Wirkung |
+| --- | --- |
+| `PLAYER_LOGIN` | DB initialisieren, Locks aufräumen, Log-Button einhängen |
+| `QUEST_LOG_UPDATE`, `QUEST_ACCEPTED`, `QUEST_WATCH_LIST_CHANGED`, `UNIT_QUEST_LOG_CHANGED` (player) | `MarkDirty()` |
+| `QUEST_REMOVED`, `QUEST_TURNED_IN` | Lock entfernen, Arm-State entfernen, `MarkDirty()` |
+| `QUEST_DATA_LOAD_RESULT (questID, ok)` | `pendingLoads[questID] = nil`, `MarkDirty()` |
+| `GET_ITEM_INFO_RECEIVED` | nur wenn `next(pendingLoads)`: `MarkDirty()` |
+| `PLAYER_LEVEL_UP` | Schwierigkeitsfarben ändern sich → `MarkDirty()` |
+| `GROUP_ROSTER_UPDATE` | Share-Buttons aktivieren/deaktivieren → `MarkDirty()` |
+
+* **Reward-Caching:** Liefert `GetQuestLogRewardInfo`/`GetQuestLogChoiceInfo` keinen Namen bzw. keine Textur, setzt der Snapshot `rewards.pending = true` und ruft einmal pro `questID` `C_QuestLog.RequestLoadQuestByID(questID)` auf (`pendingLoads` verhindert Wiederholungen). Die Zeile zeigt im Reward-Slot einen Platzhalter (Fragezeichen-Icon, leicht pulsierend per `AnimationGroup`). Nach 5 s ohne Antwort gibt der Slot auf und zeigt das Fragezeichen statisch.
+
+---
+
+## 5. UI-Aufbau
+
+### 5.1 Hauptfenster
+
+* `QuestPruneForeverFrame`, `BackdropTemplate`, `ESC` schließt (Eintrag in `UISpecialFrames`).
+* Fixiert per Default (Konvention). Entsperren über das Schloss-Symbol im Fenstertitel oder `/qp unlock`; dann per Titel-Drag verschiebbar, Position in `db.pos`.
+* **Größe: 720 × 660 px.** Titelleiste 32 px + Werkzeugleiste 40 px + 20 Zeilen × 28 px + Fußzeile 28 px (Hinweis auf Shift-/Linksklick). Ein volles Log (20 Quests) ist ohne Scrollen sichtbar; bei mehr Einträgen Scrollen per Mausrad (`FauxScrollFrame`-Prinzip, eigener Offset). Die ältere Konzeptangabe 720 × 480 passte nur ~14 Zeilen und ist ersetzt.
+
+### 5.2 Titel- und Werkzeugleiste
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ QuestPrune   19 / 20 Quests                                              🔒 ✕ │
+│ [Sortierung: Level ▲]  Filter: [Alle][Grau/Grün][0 %][Gruppe/Dungeon][✓ Abgabebereit] │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+* **Kapazität:** `numQuests / max`; Farbe weiß < max − 2, gelb ab max − 2, rot ab max. `max` aus `C_QuestLog.GetMaxNumQuestsCanAccept()`, Fallback 20.
+* **Sortierung:** Dropdown oder Klick-Zyklus (einfacher, kein `UIDropDownMenu` nötig → **Zyklus-Button** gewählt). Tiebreaker immer Titel.
+  * `level`: Level aufsteigend
+  * `zone`: Zone, dann Level
+  * `progress`: Fortschritt aufsteigend (abgabebereit ans Ende)
+* **Filter:** Einzelauswahl (Segmentleiste), Zustand in `db.filter`.
+  * `lowvalue`: Schwierigkeit `trivial` oder grün (siehe § 3.1)
+  * `untouched`: `untouched == true`
+  * `group`: `tag.dungeon or tag.raid or tag.elite or tag.group > 0`
+  * `complete`: `state == "complete"`
+* Kein Bulk-Button (siehe § 1).
+
+### 5.3 Zeile (Pool, 28 px)
+
+Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster bei 720 px:
+
+| # | Block | Breite | Element |
+| --- | --- | --- | --- |
+| 1 | Level-Badge | 40 | FontString `[18+]`, Schwierigkeitsfarbe; Suffix `+` Elite, `D` Dungeon, `R` Raid, `P` PvP |
+| 2 | Titel / Zone | 210 | zwei FontStrings (12 px / 10 px grau) |
+| 3 | Status | 170 | Badge `Fertig` / `Fehlgeschlagen` (Häkchen/Kreuz als Textur, nicht als Glyph, § 8) oder kompakter Fortschritt der offenen Ziele `4/10 Banditen, 0/1 Kopf` (gekürzt mit `…`) |
+| 4 | Rewards | 160 | bis zu 3 Item-Buttons 20×20 mit Qualitätsrahmen + `+N`, rechts davon Gold (oben) und XP (unten) |
+| A | Aktionen | 100 | Schützen, Auge, Teilen, Papierkorb (je 20×20) |
+
+* Das Schloss ist ein Element der Aktionsspalte, kein eigener Informationsblock.
+* Unberührte Quests (`untouched`): Blöcke 1–4 mit Alpha 0.55, Aktionen bleiben voll sichtbar.
+* Geschützte Quests: Papierkorb ausgeblendet, Schloss-Icon aktiv (goldfarben).
+* Scharfgeschalteter Papierkorb: wird zu einem roten Button `Sicher?`, der nach links über Auge und Teilen wächst; Zeile leicht rot hinterlegt.
+* Gerade Zeilen leicht hinterlegt für Lesbarkeit.
+
+### 5.4 Tooltips
+
+| Ziel | Inhalt |
+| --- | --- |
+| Titel | Titel, Level, Zone, Questbeschreibung (gekürzt auf ~400 Zeichen), alle Objectives untereinander |
+| Status | alle Objectives mit `have/need`, erledigte grün |
+| Reward-Icon | `GameTooltip:SetQuestLogItem(type, slot, questID)`; Vergleich über `GameTooltip_ShowCompareItem` bei `IsModifiedClick("COMPAREITEMS")` |
+| Papierkorb | Hinweis 1-Klick bzw. „Sicher?“, Shift-Klick-Info, gelb `Zerstört: [Item]` aus `GetAbandonQuestItems()` |
+| Teilen | „Nicht teilbar“ bzw. „Nicht in Gruppe“, falls deaktiviert |
+
+`GetAbandonQuestItems()` braucht die per `SetAbandonQuest()` markierte Quest. Das passiert **lazy beim Hover** über den Papierkorb, das Ergebnis wird pro `questID` bis zum nächsten Refresh gecacht. Die vorherige Questlog-Auswahl wird danach wiederhergestellt.
+
+---
+
+## 6. Aktionen
+
+### 6.1 Abbrechen (Papierkorb)
+
+Zustandsautomat pro `questID`:
+
+```
+idle ──Klick, oneClick (0 % / failed)► Abandon()
+idle ──Shift-Klick──────────────────► Abandon()
+idle ──Klick, Fortschritt/fertig────► armed (rot, "Sicher?", Token t)
+armed ──Klick innerhalb 3 s──────────► Abandon()
+armed ──C_Timer.After(3), Token == t─► idle
+```
+
+* `armed[questID] = token`; der Timer prüft das Token, damit ein späteres neues Scharfschalten nicht vom alten Timer zurückgesetzt wird.
+* `Abandon(questID)`:
+  1. abbrechen, wenn `locked` (Sicherheitsnetz, auch wenn der Button versteckt ist),
+  2. vorherige Auswahl merken (`C_QuestLog.GetSelectedQuest()`),
+  3. `C_QuestLog.SetSelectedQuest(questID)` → `C_QuestLog.SetAbandonQuest()` → `C_QuestLog.AbandonQuest()`,
+  4. Auswahl wiederherstellen, Chatmeldung „Abgebrochen: [Questlink]“,
+  5. Zeile sofort lokal entfernen (optimistisch); der folgende `QUEST_LOG_UPDATE` bestätigt.
+
+### 6.2 Weitere Aktionen
+
+| Aktion | Umsetzung |
+| --- | --- |
+| Schützen | Toggle `db.chars[key].protected[questID]`, danach `MarkDirty()` |
+| Tracking | `C_QuestLog.GetQuestWatchType(questID)` → `AddQuestWatch(questID)` / `RemoveQuestWatch(questID)`; Fallback `IsQuestWatched(index)` + `AddQuestWatch(index)` |
+| Teilen | aktiv bei `C_QuestLog.IsPushableQuest(questID) and IsInGroup()`; Auswahl setzen → `QuestLogPushQuest()` → Auswahl zurück |
+| Chat-Link | Shift-Klick auf Zeile: `ChatEdit_InsertLink(GetQuestLink(questID))` |
+| Im Log öffnen | Linksklick auf Zeile: Retail-Weg `QuestMapFrame_OpenToQuestDetails(questID)`, sonst klassisch `ShowUIPanel(QuestLogFrame)` + `QuestLog_SetSelection(index)` (Schalter § 8) |
+
+### 6.3 Einstieg
+
+* `/qp` toggelt das Fenster.
+* Button im Standard-Questlog: wird bei `PLAYER_LOGIN` an `QuestLogFrame` bzw. `QuestMapFrame` gehängt, je nachdem, welcher existiert. Existiert keiner, nur Slash (Debug-Meldung).
+
+---
+
+## 7. Slash-Befehle
+
+| Befehl | Wirkung |
+| --- | --- |
+| `/qp` | Fenster ein/aus |
+| `/qp lock` / `/qp unlock` | Fenster fixieren / verschiebbar |
+| `/qp reset` | Position, Sortierung, Filter zurücksetzen (Schutzliste bleibt) |
+| `/qp debug` | Debug-Ausgabe an/aus (Default aus) |
+| `/qp dump` | Rohdaten aller Quests + API-Verfügbarkeit in den Chat (für Fehlerberichte) |
+| `/qp compat <key> <value>` | Fallback-Schalter setzen, ohne Argument: alle anzeigen |
+| `/qp help` | Hilfe |
+
+Debug-Banner beim Einschalten: Client-Version (`GetBuildInfo`), `WOW_PROJECT_ID`, Verfügbarkeit jeder Compat-API (`ok`/`MISSING`). Pro Refresh eine Zeile `n quests, k pending, filter, sort`, nur ausgegeben, wenn sich die Signatur geändert hat.
+
+---
+
+## 8. Compat-Schicht (Fallbacks)
+
+Jede unsichere API sitzt hinter einer Funktion; der aktive Weg ist per `/qp compat` umschaltbar und wird im Debug-Banner angezeigt.
+
+| Schlüssel | Standard | Fallback |
+| --- | --- | --- |
+| `difficulty` | `GetQuestDifficultyColor` + Identitätsvergleich | eigene Rechnung über `GetQuestGreenRange()` |
+| `max` | `C_QuestLog.GetMaxNumQuestsCanAccept()` | fester Wert (Default 20) |
+| `tags` | `C_QuestLog.GetQuestTagInfo(questID)` + `Enum.QuestTag` | `info.suggestedGroup`, Titelsuffix `(Dungeon)` |
+| `rewards` | `GetQuestLogRewardInfo(i, questID)` | Auswahl setzen + Index-Variante ohne `questID` |
+| `qtext` | `GetQuestLogQuestText(index)` | Auswahl setzen, Text lesen, Auswahl zurück |
+| `openlog` | `QuestMapFrame_OpenToQuestDetails` | `QuestLogFrame` + `QuestLog_SetSelection` |
+| `statusicons` | Texturen `Interface\RaidFrame\ReadyCheck-Ready` / `-NotReady` | reiner Text ohne Symbol |
+
+---
+
+## 9. Offene Fragen & Risiken
+
+Gleiche Liste wie in [CONCEPT.md § 5](CONCEPT.md#5-offene-fragen); dort wird sie gepflegt.
+
+- [ ] **Quest-Limit in Forever:** Liefert `GetMaxNumQuestsCanAccept()` dort 20? Zählt `GetNumQuestLogEntries()` versteckte/Task-Quests mit? Im Spiel mit `/qp dump` prüfen.
+- [ ] **Abbrechen per Add-on:** Ist `C_QuestLog.AbandonQuest()` in Forever (Midnight-ähnliche Einschränkungen) geschützt? Wenn ja, trägt das Konzept nicht; früh in 0.1.0 prüfen.
+- [ ] **Questlog-UI in Forever:** Klassisches `QuestLogFrame` oder Retail-`QuestMapFrame`? Bestimmt Log-Button und `openlog`.
+- [ ] **Tags:** Liefert `GetQuestTagInfo` in Forever Elite/Dungeon/Raid/PvP verlässlich, oder nur `suggestedGroup`?
+- [ ] **Status-Icons:** Passen die Ready-Check-Texturen in 12 px? Sonst `statusicons`-Fallback.
+- [ ] **Secret Values:** Bisher kein Hinweis, dass Quest-APIs betroffen sind; beim ersten Test im Debug-Banner prüfen.
+
+---
+
+## 10. Test ohne Spiel
+
+Mit `lupa` (siehe globale Konvention):
+
+1. **Syntax:** Datei per `load()` kompilieren.
+2. **Mock-API:** `CreateFrame` (Frames, FontStrings, Textures als No-Op-Tabellen mit Recording), manuell getakteter `C_Timer`, `C_QuestLog` mit Fixture-Log:
+   * graue 0 %-Quest, graue Quest mit 3/10, abgabebereite Quest, fehlgeschlagene Quest, geschützte graue 0 %-Quest, Dungeon-Elite, Quest mit ungecachten Rewards, Quest ohne Objectives.
+3. **Szenarien** (Chat-Ausgabe und aufgerufene APIs werden mitgeschrieben):
+   * 1 Klick auf 0 %-Quest → `AbandonQuest` genau einmal.
+   * 1 Klick auf fehlgeschlagene Quest → sofortiger Abbruch.
+   * 1 Klick auf 3/10 → kein Abbruch, armed; Timer +3 s → idle; Klick, Klick → Abbruch.
+   * 1 Klick auf abgabebereite Quest ohne Objectives → armed (nicht sofort, obwohl `progress == 0`).
+   * Shift-Klick auf abgabebereite Quest → sofortiger Abbruch.
+   * `Abandon()` auf geschützte Quest (direkt aufgerufen) → kein `AbandonQuest`.
+   * Kein Code-Pfad ruft `AbandonQuest` mehr als einmal pro Klick auf.
+   * 20× `QUEST_LOG_UPDATE` in einem Frame → genau ein `Refresh()`.
+   * `QUEST_DATA_LOAD_RESULT` → `pending` verschwindet.
+   * `QUEST_REMOVED` einer geschützten Quest → Lock entfernt.
+   * Fehlende APIs (`GetQuestTagInfo = nil` usw.) → Fallback greift, kein Lua-Fehler.
+4. **Mock-Bild:** [assets/mock.svg](assets/mock.svg), bei Designänderungen nachziehen und per Headless-Edge prüfen.
+
+---
+
+## 11. Meilensteine
+
+| Version | Inhalt |
+| --- | --- |
+| 0.1.0 | Gerüst, DB, Slash, Snapshot + `/qp dump`, Debug-Banner (klärt die offenen API-Fragen im Spiel) |
+| 0.2.0 | Fenster, Header, Questzeilen, Sortierung, Filter; experimenteller Einzelabbruch mit zwei Klicks zum frühen API-Test |
+| 0.3.0 | Abbrechen (inkl. Scharfschalten), Schützen, Tracking, Teilen, Link, Log öffnen |
+| 0.4.0 | Rewards inkl. Caching, Tooltips, Abandon-Item-Warnung |
+| 1.0.0 | Icon, README, Store-Assets, Release-ZIP |
