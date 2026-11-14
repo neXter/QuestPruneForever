@@ -14,6 +14,10 @@ Dieses Dokument beschreibt, *wie* das Konzept umgesetzt wird: Dateien, Datenmode
 
 **Nicht in 1.0:** Questtext lesen im Add-on (nur Tooltip), Optionen-Panel, Account-weite Statistiken, Wiederannehmen abgebrochener Quests.
 
+Ein separater Reiter dokumentiert über QuestPrune abgebrochene Quests. Questgeber und Spielerposition werden, soweit verfügbar, bei `QUEST_DETAIL` erfasst und bei `QUEST_ACCEPTED` pro Charakter gespeichert. Erst ein bestätigtes `QUEST_REMOVED` nach einem QuestPrune-Abbruch legt den Eintrag im Reiter ab; Wiederannahme entfernt ihn. Unbekannte Questgeber oder Positionen werden als solche angezeigt; die gespeicherte Position ist die Spielerposition bei der Annahme.
+
+Bei vorhandenen Kartenkoordinaten setzen ein Wegpunkt-Button und ein Klick auf den Eintrag den Client-Wegpunkt und aktivieren, falls verfügbar, dessen Tracking. Falls die Client-API fehlt oder die Karte ablehnt, dient TomTom als Fallback. Ein fehlgeschlagener Aufruf meldet einen Fehler statt Erfolg.
+
 Mock: [assets/mock.svg](assets/mock.svg)
 
 ---
@@ -73,7 +77,6 @@ Eine Lua-Datei (wie FriendsListList), geschätzt 1.000–1.300 Zeilen. Abschnitt
   objectives   = { { text = "Bandits", have = 4, need = 10, done = false }, ... },
   progress     = 0.4,            -- 0..1, Mittel über Objectives
   untouched    = false,          -- progress == 0 und state == "active"
-  oneClick     = false,          -- untouched oder state == "failed"
   rewards      = {
     items   = { { itemID, texture, quality, count, choice = true|false, slot = i } },
     money   = 4500,              -- Kupfer
@@ -90,7 +93,7 @@ Eine Lua-Datei (wie FriendsListList), geschätzt 1.000–1.300 Zeilen. Abschnitt
 
 * **Fortschritt:** Je Objective `min(have/need, 1)`; erledigte Objectives zählen als 1. `progress` = Mittelwert. Bei fehlenden Objectives oder unbekanntem Fortschritt ist der Wert unbekannt und der Abbruch bestätigungspflichtig.
 * **`untouched`** steuert das Dimmen der Zeile und den Filter „0 %“. Abgabebereite und fehlgeschlagene Quests sind nie `untouched`.
-* **`oneClick`** steuert den Papierkorb: unberührte und fehlgeschlagene Quests brechen mit 1 Klick ab (es geht nichts verloren), alle anderen brauchen „Sicher?“ oder Shift.
+* **Abbruch:** Jede ungeschützte Quest benötigt zwei Klicks innerhalb von drei Sekunden, unabhängig von Fortschritt oder Shift-Taste.
 * **Zone:** Beim Durchlauf über `C_QuestLog.GetNumQuestLogEntries()` merkt sich der Snapshot den letzten Eintrag mit `isHeader` als Zone. Versteckte Einträge (`isHidden`, `isTask`, `isBounty`) werden übersprungen.
 * **Schwierigkeit:** `GetQuestDifficultyColor(level)` liefert eine Farbtabelle; die Kategorie wird über Identität mit `QuestDifficultyColors[key]` bestimmt. Fallback: eigene Rechnung aus `UnitLevel("player")` und `GetQuestGreenRange()` (§ 8).
 
@@ -150,7 +153,8 @@ OnShow ──► dirty? ──► Refresh() sofort                              
 ### 5.1 Hauptfenster
 
 * `QuestPruneForeverFrame`, `BackdropTemplate`, `ESC` schließt (Eintrag in `UISpecialFrames`).
-* Klassisch inspirierte Gestaltung mit warmem dunklem Hintergrund, goldbraunem Rahmen, eingefassten Buttons und Blizzard-Schriften; bestehende Client-Tooltip-Texturen bilden den Fensterrahmen.
+* Klassisch inspirierte Gestaltung mit deckendem dunklem Hintergrund, eigener brauner Titeltextur, Client-Dialograhmen, eingefassten Buttons und Blizzard-Schriften. `/qp compat skin plain` schaltet auf den bisherigen Tooltip-Rahmen zurück; `classic` aktiviert den Client-Dialograhmen.
+* Oben links sitzt ein rundes Medaillon aus dem eigenen Add-on-Icon; Titel und Sortierbutton beginnen rechts davon.
 * Fixiert per Default (Konvention). Entsperren über das Schloss-Symbol im Fenstertitel oder `/qp unlock`; dann per Titel-Drag verschiebbar, Position in `db.pos`.
 * **Größe: 720 × 660 px.** Die Liste nutzt einen 560 px hohen sichtbaren Bereich. Questzeilen sind mindestens 28 px hoch und wachsen mit dem umgebrochenen Zieltext; dezente Überschriften belegen 20 px. Das Mausrad scrollt über Einträge, die nicht mehr vollständig hineinpassen. Extrem hohe Einträge werden auf den sichtbaren Bereich begrenzt; der Tooltip zeigt weiterhin alle Ziele.
 
@@ -166,25 +170,32 @@ OnShow ──► dirty? ──► Refresh() sofort                              
 * **Kapazität:** `numQuests / max`; Farbe weiß < max − 2, gelb ab max − 2, rot ab max. `max` aus `C_QuestLog.GetMaxNumQuestsCanAccept()`, Fallback 20.
 * **Sortierung:** Klick-Zyklus; die gefilterten Quests werden in Abschnitten mit eigenen, mitscrollenden Überschriften angezeigt. Überschriften belegen Listenzeilen.
   * `level`: Schwierigkeitsfarbe des Clients (Grau bis Rot, sonst unbekannt), innerhalb der Gruppe Level und Titel
-  * `zone`: Gebiet, dann Level und Titel; das Gebiet entfällt in den einzelnen Zeilen
+  * `zone`: aktuelles Gebiet zuerst, danach alphabetisch; innerhalb jedes Gebiets Level und Titel. Das Gebiet entfällt in den einzelnen Zeilen.
   * `progress`: unberührt, in Arbeit, unbekannt, abgabebereit, fehlgeschlagen; innerhalb der Gruppe Fortschritt und Titel
-* **Filter:** Einzelauswahl (Segmentleiste), Zustand in `db.filter`.
+  * `type`: Solo, Klasse, Beruf, Gruppe/Elite, Dungeon, Schlachtzug, PvP und unbekannte Typen; innerhalb der Gruppe Level und Titel. Klasse und Beruf werden anhand der lokalisierten Questlog-Überschrift erkannt und können zusätzlich zum Dungeon- oder Gruppentyp vorliegen.
+* **Filter:** Einzelauswahl über kompakte Symbol-Buttons mit Tooltips, Zustand in `db.filter`. Erneutes Anklicken des aktiven Filters setzt ihn auf `all`; `all` bleibt bei erneutem Klick aktiv.
   * `lowvalue`: Schwierigkeit `trivial` oder grün (siehe § 3.1)
   * `untouched`: `untouched == true`
-  * `group`: `tag.dungeon or tag.raid or tag.elite or tag.group > 0`
+  * `group`: Gruppen- und Elitequests
+  * `dungeon`: Dungeonquests
+  * `raid`: Schlachtzugsquests
+  * `pvp`: PvP-Quests
+  * `class`: Questlog-Überschrift entspricht einem lokalisierten Klassennamen
+  * `profession`: Questlog-Überschrift entspricht einem lokalisierten Berufsnamen
+  * `postclassic`: Quest-ID über 9665; heuristische Kennzeichnung nach ursprünglichem Classic, keine verifizierte Forever-Herkunft
   * `complete`: `state == "complete"`
 * Kein Bulk-Button (siehe § 1).
 
 ### 5.3 Zeile (Pool, mindestens 28 px)
 
-Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster bei 720 px:
+Zeilen werden einmalig erzeugt (Pool von 28, genug für den 560 px hohen Bereich mit 20 px hohen Abschnittsüberschriften) und nur neu befüllt. Spaltenraster bei 720 px:
 
 | # | Block | Breite | Element |
 | --- | --- | --- | --- |
-| 1 | Level-Badge | 60 | Level in Schwierigkeitsfarbe und eigenes Symbol für Gruppen-/Elite-, Dungeon- oder PvP-Quest |
+| 1 | Level-Badge | 60 | Symbol für Gruppen-/Elite-, Dungeon-, Raid- oder PvP-Quest vor dem Level in Schwierigkeitsfarbe |
 | 2 | Titel / Zone | 210 | zwei FontStrings (12 px / 10 px grau) |
 | 3 | Status | 220 | Badge `Fertig` / `Fehlgeschlagen` oder offene Ziele untereinander; lange Ziele werden umgebrochen |
-| 4 | Rewards | 160 | bis zu 3 Item-Buttons 20×20 mit Qualitätsrahmen + `+N`, rechts davon Gold (oben) und XP (unten) |
+| 4 | Rewards | 128 | bis zu 3 Item-Buttons mit Qualitätsrahmen + `+N`, rechts davon Geld (oben) und XP (unten); fehlende Daten als Fragezeichen |
 | A | Aktionen | 100 | Schützen, Auge, Teilen, Papierkorb (je 20×20) |
 
 * Das Schloss ist ein Element der Aktionsspalte, kein eigener Informationsblock.
@@ -192,6 +203,7 @@ Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster
 * Geschützte Quests: Papierkorb ausgeblendet, Schloss-Icon aktiv (goldfarben). Schützen und Abbrechen zeigen Symbol und Text; die Fenstersperre im Titel ist ein Schloss-Symbol mit Tooltip.
 * Scharfgeschalteter Papierkorb: wird zu einem roten Button `Sicher?`, der nach links über Auge und Teilen wächst; Zeile leicht rot hinterlegt.
 * Gerade Zeilen leicht hinterlegt für Lesbarkeit.
+* Questzeilen im aktuellen Gebiet und deren Gebietsüberschrift erhalten einen dezenten Akzent links. `GetRealZoneText()` und `GetZoneText()` liefern die Vergleichsnamen; bei fehlenden oder nicht übereinstimmenden Namen bleibt die Markierung aus. Gebietswechsel lösen eine Aktualisierung aus.
 
 ### 5.4 Tooltips
 
@@ -200,7 +212,7 @@ Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster
 | Titel | Titel, Level, Zone, Questbeschreibung (gekürzt auf ~400 Zeichen), alle Objectives untereinander |
 | Status | alle Objectives mit `have/need`, erledigte grün |
 | Reward-Icon | `GameTooltip:SetQuestLogItem(type, slot, questID)`; Vergleich über `GameTooltip_ShowCompareItem` bei `IsModifiedClick("COMPAREITEMS")` |
-| Papierkorb | Hinweis 1-Klick bzw. „Sicher?“, Shift-Klick-Info, gelb `Zerstört: [Item]` aus `GetAbandonQuestItems()` |
+| Abbrechen | Hinweis auf die Bestätigung, gelb `Zerstört: [Item]` aus `GetAbandonQuestItems()` |
 | Teilen | „Nicht teilbar“ bzw. „Nicht in Gruppe“, falls deaktiviert |
 
 `GetAbandonQuestItems()` braucht die per `SetAbandonQuest()` markierte Quest. Das passiert **lazy beim Hover** über den Papierkorb, das Ergebnis wird pro `questID` bis zum nächsten Refresh gecacht. Die vorherige Questlog-Auswahl wird danach wiederhergestellt.
@@ -214,9 +226,7 @@ Zeilen werden einmalig erzeugt (Pool von 25) und nur neu befüllt. Spaltenraster
 Zustandsautomat pro `questID`:
 
 ```
-idle ──Klick, oneClick (0 % / failed)► Abandon()
-idle ──Shift-Klick──────────────────► Abandon()
-idle ──Klick, Fortschritt/fertig────► armed (rot, "Sicher?", Token t)
+idle ──Klick────────────────────────► armed (rot, "Sicher?", Token t)
 armed ──Klick innerhalb 3 s──────────► Abandon()
 armed ──C_Timer.After(3), Token == t─► idle
 ```
@@ -242,7 +252,8 @@ armed ──C_Timer.After(3), Token == t─► idle
 ### 6.3 Einstieg
 
 * `/qp` toggelt das Fenster.
-* Button im Standard-Questlog: wird bei `PLAYER_LOGIN` an `QuestLogFrame` bzw. `QuestMapFrame` gehängt, je nachdem, welcher existiert. Existiert keiner, nur Slash (Debug-Meldung).
+* Kompaktes QuestPrune-Symbol in der Titelleiste der Karte (`WorldMapFrame`, alternativ `QuestMapFrame`): wird beim Login oder nach dem späteren Laden des Questlog-Add-ons eingehängt. Ein Klick schließt das Karten-/Questlogfenster und öffnet QuestPrune; der Zeilenklick wechselt zurück. Ist keiner der Frames verfügbar, bleibt der Slash-Befehl nutzbar.
+* Der Kartenbutton verwendet standardmäßig die Client-Textur `MiniMap-TrackingBorder`, mit einem anhand des Forever-Screenshots korrigierten Versatz. `/qp compat mapbutton simple` blendet den Rahmen aus; `classic` aktiviert ihn wieder.
 
 ---
 
@@ -299,11 +310,10 @@ Mit `lupa` (siehe globale Konvention):
 2. **Mock-API:** `CreateFrame` (Frames, FontStrings, Textures als No-Op-Tabellen mit Recording), manuell getakteter `C_Timer`, `C_QuestLog` mit Fixture-Log:
    * graue 0 %-Quest, graue Quest mit 3/10, abgabebereite Quest, fehlgeschlagene Quest, geschützte graue 0 %-Quest, Dungeon-Elite, Quest mit ungecachten Rewards, Quest ohne Objectives.
 3. **Szenarien** (Chat-Ausgabe und aufgerufene APIs werden mitgeschrieben):
-   * 1 Klick auf 0 %-Quest → `AbandonQuest` genau einmal.
-   * 1 Klick auf fehlgeschlagene Quest → sofortiger Abbruch.
+   * 1 Klick auf 0 %-Quest oder fehlgeschlagene Quest → kein Abbruch; zweiter Klick → `AbandonQuest` genau einmal.
    * 1 Klick auf 3/10 → kein Abbruch, armed; Timer +3 s → idle; Klick, Klick → Abbruch.
    * 1 Klick auf abgabebereite Quest ohne Objectives → armed (nicht sofort, obwohl `progress == 0`).
-   * Shift-Klick auf abgabebereite Quest → sofortiger Abbruch.
+   * Shift-Klick auf abgabebereite Quest → ebenfalls zuerst Bestätigung.
    * `Abandon()` auf geschützte Quest (direkt aufgerufen) → kein `AbandonQuest`.
    * Kein Code-Pfad ruft `AbandonQuest` mehr als einmal pro Klick auf.
    * 20× `QUEST_LOG_UPDATE` in einem Frame → genau ein `Refresh()`.
