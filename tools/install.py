@@ -2,6 +2,7 @@
 
 Usage: python tools/install.py "<World of Warcraft>/_forever_/Interface/AddOns"
 """
+from datetime import datetime
 from pathlib import Path
 import shutil
 import sys
@@ -20,10 +21,16 @@ def main():
     destination.mkdir(exist_ok=True)
     for source in (ROOT / (NAME + ".toc"), ROOT / (NAME + ".lua"), ROOT / "LICENSE"):
         shutil.copy2(source, destination / source.name)
+    lua = destination / (NAME + ".lua")
+    data = lua.read_bytes()
+    if b'local BUILD = "dev"' not in data:
+        sys.exit("Build marker missing in the Lua file")
+    stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    lua.write_bytes(data.replace(b'local BUILD = "dev"', f'local BUILD = "{stamp}"'.encode(), 1))
     icons = ROOT / "Icons"
     if icons.is_dir():
         shutil.copytree(icons, destination / "Icons", dirs_exist_ok=True)
-    print(f"Installed {destination}. Reload the game UI with /reload.")
+    print(f"Installed {destination} (build {stamp}). Reload the game UI with /reload.")
 
 
 if __name__ == "__main__":

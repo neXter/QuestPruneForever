@@ -113,6 +113,7 @@ def main():
       command("compat skin plain"); assert(frames[2].backdrop.edgeFile:match("UI%-Tooltip%-Border$"))
       command("compat skin classic"); assert(frames[2].backdrop.edgeFile:match("UI%-DialogBox%-Border$"))
       assert(frames[91]:GetWidth()==28)
+      assert(frames[2].build.text=="v1.1.1 (dev)")
       assert(frames[101]:GetWidth()==#"Active"*6+30 and frames[102]:GetWidth()==#"Abandoned"*6+30)
       for _, f in ipairs(frames) do if f.scripts.OnClick then testbutton=f end end
       -- The first row button follows the title buttons in the frame list.

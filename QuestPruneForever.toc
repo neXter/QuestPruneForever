@@ -3,7 +3,7 @@
 ## Notes: Review, protect and abandon quests in a compact quest log
 ## Notes-deDE: Quests in einer kompakten Übersicht prüfen, schützen und abbrechen
 ## Author: neXter
-## Version: 1.1.0
+## Version: 1.1.1
 ## SavedVariables: QuestPruneForeverDB
 ## IconTexture: Interface\AddOns\QuestPruneForever\Icons\icon
 

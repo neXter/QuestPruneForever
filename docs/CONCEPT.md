@@ -71,6 +71,7 @@ Jede Zeile besitzt rechtsbündig Aktionen für sofortige Interaktion ohne Unterm
   * Fensterposition und Fenstersperre,
   * zuletzt gewählter Sortierung und zuletzt gewähltem Filter,
   * Debug-Schalter (standardmäßig aus) und Fallback-Schaltern für unbestätigte Client-APIs.
+* **Versionsanzeige:** Unten rechts im Fenster steht klein `vX.Y.Z (Build-Zeitpunkt)`, damit beim Testen sofort erkennbar ist, welche Fassung läuft. Install- und Build-Skript setzen den Zeitpunkt in die erzeugte Kopie; im Quellordner steht `dev`.
 * **Slash-Befehle:** `/qp` (Fenster), `/qp lock` / `unlock`, `/qp reset`, `/qp debug`, `/qp dump`, `/qp compat`, `/qp help`.
 
 ### 5. Offene Fragen

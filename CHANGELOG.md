@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.1] - 2026-11-16
+
+- Show the version and build time in small text at the bottom right of the window, and include the build time in `/qp dump`.
+
 ## [1.1.0] - 2026-11-16
 
 - Record quests abandoned through the standard quest log in the Abandoned tab, by following the game's abandon calls.

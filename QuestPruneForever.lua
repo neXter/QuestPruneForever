@@ -1,5 +1,7 @@
 local ADDON = ...
-local VERSION = "1.1.0"
+local VERSION = "1.1.1"
+-- tools/install.py and tools/build.py replace "dev" with the build time in the copy they produce.
+local BUILD = "dev"
 local de = GetLocale() == "deDE"
 local db
 local function out(s) print("|cff66ccffQuestPrune|r: " .. s) end
@@ -80,7 +82,7 @@ end
 local abandonStatus
 local function banner()
   local version, build = call(GetBuildInfo)
-  out("v" .. VERSION .. " client=" .. tostring(version) .. " build=" .. tostring(build) .. " project=" .. tostring(WOW_PROJECT_ID))
+  out("v" .. VERSION .. " build=" .. BUILD .. " client=" .. tostring(version) .. " build=" .. tostring(build) .. " project=" .. tostring(WOW_PROJECT_ID))
   for _, name in ipairs({"GetNumQuestLogEntries", "GetInfo", "GetMaxNumQuestsCanAccept", "GetQuestTagInfo", "GetQuestObjectives", "RequestLoadQuestByID", "SetSelectedQuest", "SetAbandonQuest", "AbandonQuest", "GetQuestWatchType", "IsPushableQuest", "GetAbandonQuest", "GetSelectedQuest"}) do
     out("C_QuestLog." .. name .. "=" .. (available(C_QuestLog, name) and "ok" or "MISSING"))
   end
@@ -574,6 +576,8 @@ local function createWindow()
     end
   end
   local hint=window:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall"); hint:SetPoint("BOTTOMLEFT", 16, 10); hint:SetText(label("Click: details. Wheel: scroll. Abandon: click twice.", "Klick: Details. Mausrad: scrollen. Abbrechen: zweimal klicken."))
+  local build=window:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall"); build:SetPoint("BOTTOMRIGHT", -16, 10); build:SetJustifyH("RIGHT"); build:SetText("v"..VERSION.." ("..BUILD..")")
+  window.build=build
   window:EnableMouseWheel(true); window:SetScript("OnMouseWheel", function(_, delta) offset=math.max(0, math.min(window.maxOffset or 0, offset-delta)); render() end)
   window:SetScript("OnHide", function() armed=nil; armToken=armToken+1 end)
 end

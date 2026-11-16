@@ -1,4 +1,5 @@
 """Build and list the release ZIP: python tools/build.py"""
+from datetime import datetime
 from pathlib import Path
 import re
 import sys
@@ -22,8 +23,16 @@ def main():
     output = ROOT / "dist" / f"{NAME}-{toc_version.group(1)}.zip"
     output.parent.mkdir(exist_ok=True)
     with ZipFile(output, "w", ZIP_DEFLATED) as archive:
+        stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
         for file in files:
-            archive.write(file, (Path(NAME) / file.relative_to(ROOT)).as_posix())
+            name = (Path(NAME) / file.relative_to(ROOT)).as_posix()
+            if file.suffix == ".lua":
+                data = file.read_bytes()
+                if b'local BUILD = "dev"' not in data:
+                    sys.exit("Build marker missing in the Lua file")
+                archive.writestr(name, data.replace(b'local BUILD = "dev"', f'local BUILD = "{stamp}"'.encode(), 1))
+            else:
+                archive.write(file, name)
     print(f"Built {output}")
     with ZipFile(output) as archive:
         for entry in archive.infolist():

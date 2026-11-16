@@ -14,6 +14,8 @@ The blue infinity icon and its filter use a simple approximation: quest IDs abov
 
 For development, run the VS Code task **Install QuestPruneForever for testing** and enter the path to the game's `_forever_/Interface/AddOns` folder. Alternatively, run `python tools/install.py "<path to AddOns>"` in the terminal. Use `/reload` in game after installing.
 
+The window shows `vX.Y.Z (build time)` at the bottom right. `tools/install.py` and `tools/build.py` stamp the time into the copy they produce; running straight from the source folder shows `dev`.
+
 Run `python tools/smoke.py` for the mocked smoke test (requires `python -m pip install --user lupa`). Run `python tools/build.py` to build and list the release ZIP in `dist/`.
 
 Copyright (c) 2026 neXter. See [LICENSE](LICENSE).
