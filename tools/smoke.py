@@ -63,6 +63,12 @@ CreateFrame = function(kind, name, parent)
   frames[#frames+1]=f
   return f
 end
+function hooksecurefunc(a, b, c)
+  local owner, key, fn = _G, a, b
+  if type(a) == "table" then owner, key, fn = a, b, c end
+  local original = owner[key]
+  owner[key] = function(...) local r = table.pack(original(...)); fn(...); return table.unpack(r, 1, r.n) end
+end
 function event(name, arg, second) frame.handler(frame, name, arg, second) end
 function command(s) SlashCmdList.QUESTPRUNE(s) end
 function flush() local pending = timers; timers = {}; for _, fn in ipairs(pending) do fn() end end
@@ -343,10 +349,78 @@ def main():
       QuestPruneForeverDB.filter="profession"; event("QUEST_LOG_UPDATE"); flush()
       assert(frames[10].data.info.questID==2)
     ''')
+    # Abandons made in the standard quest UI (hooks, inference, off switch).
+    ui = LuaRuntime(unpack_returned_tuples=True)
+    ui.execute(PRELUDE)
+    ui.eval("function(s) local f,err=load(s); if not f then error(err) end; return f end")(source)("QuestPruneForever")
+    ui.execute('''
+      selected=7; abandoned=0
+      C_QuestLog.GetNumQuestLogEntries=function() return 2,1 end
+      C_QuestLog.GetInfo=function(i) if i==1 then return {isHeader=true,title="Test Zone"} end return {questID=42,title="Test Quest",level=5} end
+      C_QuestLog.GetSelectedQuest=function() return selected end
+      C_QuestLog.SetSelectedQuest=function(id) selected=id end
+      C_QuestLog.SetAbandonQuest=function() abandonTarget=selected end
+      C_QuestLog.GetAbandonQuest=function() return abandonTarget end
+      C_QuestLog.AbandonQuest=function() abandoned=abandoned+1 end
+      C_QuestLog.GetTitleForQuestID=function(id) return "Title "..id end
+      event("ADDON_LOADED","QuestPruneForever"); event("PLAYER_LOGIN")
+      local char=QuestPruneForeverDB.chars["Realm-Tester"]
+      -- Blizzard's popup: select, mark the target, confirm.
+      local function standardUI(id) C_QuestLog.SetSelectedQuest(id); C_QuestLog.SetAbandonQuest(); C_QuestLog.AbandonQuest() end
+      command("debug"); chat={}
+      standardUI(42); selected=7
+      assert(not char.abandoned[42])
+      event("QUEST_REMOVED",42)
+      assert(char.abandoned[42] and char.abandoned[42].title=="Test Quest" and char.abandoned[42].zone=="Test Zone")
+      assert(table.concat(chat,"\\n"):match("abandon in standard UI: id=42"))
+      -- A turn-in is not an abandon, whichever event comes first.
+      event("QUEST_TURNED_IN",43); event("QUEST_REMOVED",43); flush()
+      assert(not char.abandoned[43])
+      -- A removal without a hooked abandon is ignored in hook mode.
+      event("QUEST_REMOVED",44); flush()
+      assert(not char.abandoned[44])
+      -- The abandon target (not in the visible list) can differ from the selection.
+      standardUI(45); selected=7; event("QUEST_REMOVED",45)
+      assert(char.abandoned[45].title=="Title 45")
+      -- A stale target expires and does not capture later removals.
+      standardUI(48); flush(); event("QUEST_REMOVED",49); flush()
+      assert(not char.abandoned[49] and not char.abandoned[48])
+      char.abandoned[42]=nil
+      command("compat abandon off")
+      standardUI(42); event("QUEST_REMOVED",42); flush()
+      assert(not char.abandoned[42])
+      command("compat abandon infer")
+      event("QUEST_REMOVED",44); assert(not char.abandoned[44]); flush()
+      assert(char.abandoned[44] and char.abandoned[44].title=="Title 44")
+      event("QUEST_REMOVED",46); event("QUEST_TURNED_IN",46); flush()
+      assert(not char.abandoned[46])
+      event("QUEST_TURNED_IN",47); event("QUEST_REMOVED",47); flush()
+      assert(not char.abandoned[47])
+      command("compat abandon hook"); command("compat")
+      assert(table.concat(chat,"\\n"):match("abandon: hook, active hook"))
+      -- QuestPrune's own abandon is recorded once and not mistaken for a standard-UI abandon.
+      command(""); chat={}; selected=7
+      local button=frames[11]
+      button.scripts.OnClick(); button.scripts.OnClick()
+      assert(abandoned==5 and selected==7)
+      assert(not table.concat(chat,"\\n"):match("standard UI"))
+      event("QUEST_REMOVED",42)
+      assert(char.abandoned[42].title=="Test Quest")
+    ''')
+    # Without usable hooks the add-on falls back to inference.
+    nohook = LuaRuntime(unpack_returned_tuples=True)
+    nohook.execute(PRELUDE)
+    nohook.eval("function(s) local f,err=load(s); if not f then error(err) end; return f end")(source)("QuestPruneForever")
+    nohook.execute('''
+      event("ADDON_LOADED","QuestPruneForever"); event("PLAYER_LOGIN")
+      command("compat"); assert(table.concat(chat,"\\n"):match("active infer"))
+      event("QUEST_REMOVED",50); flush()
+      assert(QuestPruneForeverDB.chars["Realm-Tester"].abandoned[50])
+    ''')
     print("Chat output:")
     for line in lua.globals().chat.values():
         print(line)
-    print("PASS: syntax, startup, dump, debounce, reset, quest protection and abandonment")
+    print("PASS: syntax, startup, dump, debounce, reset, quest protection, abandonment and standard-UI abandon tracking")
 
 
 if __name__ == "__main__":

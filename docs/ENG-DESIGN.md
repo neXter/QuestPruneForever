@@ -14,7 +14,7 @@ Dieses Dokument beschreibt, *wie* das Konzept umgesetzt wird: Dateien, Datenmode
 
 **Nicht in 1.0:** Questtext lesen im Add-on (nur Tooltip), Optionen-Panel, Account-weite Statistiken, Wiederannehmen abgebrochener Quests.
 
-Ein separater Reiter dokumentiert über QuestPrune abgebrochene Quests. Questgeber und Spielerposition werden, soweit verfügbar, bei `QUEST_DETAIL` erfasst und bei `QUEST_ACCEPTED` pro Charakter gespeichert. Erst ein bestätigtes `QUEST_REMOVED` nach einem QuestPrune-Abbruch legt den Eintrag im Reiter ab; Wiederannahme entfernt ihn. Unbekannte Questgeber oder Positionen werden als solche angezeigt; die gespeicherte Position ist die Spielerposition bei der Annahme.
+Ein separater Reiter dokumentiert über QuestPrune abgebrochene Quests. Questgeber und Spielerposition werden, soweit verfügbar, bei `QUEST_DETAIL` erfasst und bei `QUEST_ACCEPTED` pro Charakter gespeichert. Erst ein bestätigtes `QUEST_REMOVED` nach einem Abbruch legt den Eintrag im Reiter ab. Abbrüche über das Standard-Questlog werden per `hooksecurefunc` auf `C_QuestLog.SetAbandonQuest` (merkt die Auswahl als Ziel) und `C_QuestLog.AbandonQuest` (setzt dieselbe `pendingAbandon`-Markierung wie QuestPrune selbst; globale Varianten werden mitgehookt, sofern vorhanden) erkannt. Die Quest-ID kommt aus `C_QuestLog.GetAbandonQuest()`, sonst aus dem gemerkten Ziel, sonst aus der aktuellen Auswahl. Der Hook ignoriert Aufrufe, während `pendingAbandon` gesetzt ist (eigener Abbruch). Schalter `/qp compat abandon hook|infer|off`: `infer` wertet `QUEST_REMOVED` ohne `QUEST_TURNED_IN` (in beliebiger Reihenfolge, 0,5 s Wartezeit) als Abbruch; fehlen die Hooks, gilt automatisch `infer`; Wiederannahme entfernt ihn. Unbekannte Questgeber oder Positionen werden als solche angezeigt; die gespeicherte Position ist die Spielerposition bei der Annahme.
 
 Bei vorhandenen Kartenkoordinaten setzen ein Wegpunkt-Button und ein Klick auf den Eintrag den Client-Wegpunkt und aktivieren, falls verfügbar, dessen Tracking. Falls die Client-API fehlt oder die Karte ablehnt, dient TomTom als Fallback. Ein fehlgeschlagener Aufruf meldet einen Fehler statt Erfolg.
 
@@ -285,6 +285,7 @@ Jede unsichere API sitzt hinter einer Funktion; der aktive Weg ist per `/qp comp
 | `rewards` | `GetQuestLogRewardInfo(i, questID)` | Auswahl setzen + Index-Variante ohne `questID` |
 | `qtext` | `GetQuestLogQuestText(index)` | Auswahl setzen, Text lesen, Auswahl zurück |
 | `openlog` | `QuestMapFrame_OpenToQuestDetails` | `QuestLogFrame` + `QuestLog_SetSelection` |
+| `abandon` | Hooks auf `SetAbandonQuest`/`AbandonQuest` (Standard-Log-Abbrüche) | `infer`: `QUEST_REMOVED` ohne `QUEST_TURNED_IN`; `off` |
 | `statusicons` | Texturen `Interface\RaidFrame\ReadyCheck-Ready` / `-NotReady` | reiner Text ohne Symbol |
 
 ---

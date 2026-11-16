@@ -1,5 +1,5 @@
 local ADDON = ...
-local VERSION = "1.0.0"
+local VERSION = "1.1.0"
 local de = GetLocale() == "deDE"
 local db
 local function out(s) print("|cff66ccffQuestPrune|r: " .. s) end
@@ -77,13 +77,15 @@ local function formatXP(xp)
   if xp>=1000 then return (("%.1fk XP"):format(xp/1000):gsub("%.0k","k")) end
   return math.floor(xp).." XP"
 end
+local abandonStatus
 local function banner()
   local version, build = call(GetBuildInfo)
   out("v" .. VERSION .. " client=" .. tostring(version) .. " build=" .. tostring(build) .. " project=" .. tostring(WOW_PROJECT_ID))
-  for _, name in ipairs({"GetNumQuestLogEntries", "GetInfo", "GetMaxNumQuestsCanAccept", "GetQuestTagInfo", "GetQuestObjectives", "RequestLoadQuestByID", "SetSelectedQuest", "SetAbandonQuest", "AbandonQuest", "GetQuestWatchType", "IsPushableQuest"}) do
+  for _, name in ipairs({"GetNumQuestLogEntries", "GetInfo", "GetMaxNumQuestsCanAccept", "GetQuestTagInfo", "GetQuestObjectives", "RequestLoadQuestByID", "SetSelectedQuest", "SetAbandonQuest", "AbandonQuest", "GetQuestWatchType", "IsPushableQuest", "GetAbandonQuest", "GetSelectedQuest"}) do
     out("C_QuestLog." .. name .. "=" .. (available(C_QuestLog, name) and "ok" or "MISSING"))
   end
   out("QuestMapFrame=" .. tostring(QuestMapFrame ~= nil) .. " QuestLogFrame=" .. tostring(QuestLogFrame ~= nil))
+  if abandonStatus then out(abandonStatus()) end
 end
 local function snapshot()
   local result, zone = {}, ""
@@ -143,6 +145,75 @@ local function recordOffer()
   local mapInfo = mapID and call(C_Map and C_Map.GetMapInfo, mapID)
   offeredQuest={id=id, title=call(GetTitleText), giver=call(UnitName,"npc"), mapID=mapID,
     map=type(mapInfo)=="table" and mapInfo.name or nil, x=x, y=y}
+end
+-- Abandons made in the standard quest UI never pass through abandon() below.
+-- "hook" follows Blizzard's own calls: SetAbandonQuest marks the target and the
+-- confirmation dialog then calls AbandonQuest. "infer" treats a QUEST_REMOVED
+-- without a matching QUEST_TURNED_IN as an abandon; "off" records nothing.
+local abandonHooked, abandonHookCount, lastAbandonTarget = {}, 0, nil
+local turnedIn = {}
+local function abandonMode()
+  local mode = db and db.compat and db.compat.abandon or "hook"
+  if mode == "hook" and abandonHookCount == 0 then return "infer" end
+  return mode
+end
+local function selectedQuest()
+  local id = call(C_QuestLog and C_QuestLog.GetSelectedQuest)
+  return type(id) == "number" and id > 0 and id or nil
+end
+local function abandonTarget()
+  local id = call(C_QuestLog and C_QuestLog.GetAbandonQuest)
+  if type(id) ~= "number" or id <= 0 then id = lastAbandonTarget end
+  if type(id) ~= "number" or id <= 0 then id = selectedQuest() end
+  return type(id) == "number" and id > 0 and id or nil
+end
+abandonStatus = function()
+  return "standard-UI abandon tracking: mode=" .. ((db and db.compat and db.compat.abandon) or "hook") .. " active=" .. abandonMode() .. " hooks=" .. abandonHookCount
+end
+local function standardAbandon()
+  -- QuestPrune's own abandon() sets pendingAbandon before it calls AbandonQuest.
+  if pendingAbandon or not character or abandonMode() ~= "hook" then return end
+  local id = abandonTarget()
+  if not id then
+    if db.debug then out("abandon in standard UI: target quest unknown, nothing recorded") end
+    return
+  end
+  local title, zone
+  for _, entry in ipairs((snapshot())) do
+    if entry.info.questID == id then title, zone = entry.info.title, entry.zone; break end
+  end
+  local known = character.accepted[id]
+  title = title or (known and known.title) or call(C_QuestLog and C_QuestLog.GetTitleForQuestID, id)
+  local attempt = {id=id, title=title, zone=zone}
+  pendingAbandon = attempt
+  C_Timer.After(5, function() if pendingAbandon == attempt then pendingAbandon = nil end end)
+  if db.debug then out("abandon in standard UI: id=" .. id .. " title=" .. tostring(title)) end
+end
+local function installAbandonHooks()
+  if type(hooksecurefunc) ~= "function" then return end
+  local function mark() lastAbandonTarget = selectedQuest() end
+  local function hook(tag, owner, key, fn)
+    if abandonHooked[tag] or not available(owner, key) then return end
+    if pcall(hooksecurefunc, owner, key, fn) then abandonHooked[tag] = true; abandonHookCount = abandonHookCount + 1 end
+  end
+  hook("C_QuestLog.SetAbandonQuest", C_QuestLog, "SetAbandonQuest", mark)
+  hook("C_QuestLog.AbandonQuest", C_QuestLog, "AbandonQuest", standardAbandon)
+  hook("SetAbandonQuest", _G, "SetAbandonQuest", mark)
+  hook("AbandonQuest", _G, "AbandonQuest", standardAbandon)
+end
+local function recordAbandoned(id, title, zone)
+  local saved = character.accepted[id] or {id=id}
+  saved.title = saved.title or title
+  saved.zone = saved.zone or zone
+  character.abandoned[id] = saved
+end
+local function inferAbandon(id)
+  if not character or abandonMode() ~= "infer" or turnedIn[id] then return end
+  C_Timer.After(0.5, function()
+    if turnedIn[id] or character.abandoned[id] then return end
+    recordAbandoned(id, call(C_QuestLog and C_QuestLog.GetTitleForQuestID, id))
+    if window and window:IsShown() then render() end
+  end)
 end
 local sorts = {"level", "zone", "progress", "type"}
 local filters = {"all", "lowvalue", "untouched", "group", "dungeon", "raid", "pvp", "complete", "postclassic", "class", "profession"}
@@ -794,12 +865,15 @@ SlashCmdList.QUESTPRUNE = function(msg)
       db.compat.rewards=value; if window and window:IsShown() then render() end; out("rewards: " .. value)
     elseif key == "coins" and (value == "native" or value == "text") then
       db.compat.coins=value; if window and window:IsShown() then render() end; out("coins: " .. value)
+    elseif key == "abandon" and (value == "hook" or value == "infer" or value == "off") then
+      db.compat.abandon=value; out("abandon: " .. value .. " (active: " .. abandonMode() .. ")")
     elseif key == "" then
+      out("abandon: " .. (db.compat.abandon or "hook") .. ", active " .. abandonMode() .. " (/qp compat abandon hook|infer|off)")
       out("mapbutton: " .. (db.compat.mapbutton or "classic") .. " (/qp compat mapbutton classic|simple)")
       out("skin: " .. (db.compat.skin or "classic") .. " (/qp compat skin classic|plain)")
       out("rewards: " .. (db.compat.rewards or "direct") .. " (/qp compat rewards direct|selected)")
       out("coins: " .. (db.compat.coins or "native") .. " (/qp compat coins native|text)")
-    else out("/qp compat mapbutton classic|simple  |  skin classic|plain  |  rewards direct|selected  |  coins native|text") end
+    else out("/qp compat mapbutton classic|simple  |  skin classic|plain  |  rewards direct|selected  |  coins native|text  |  abandon hook|infer|off") end
   elseif cmd == "help" then out("/qp dump | debug | lock | unlock | reset | compat | help")
   else toggleWindow() end
 end
@@ -824,7 +898,7 @@ frame:SetScript("OnEvent", function(_, event, name, questID)
     if db.debug == nil then db.debug = false end
     db.version = 1; db.sort = db.sort or "level"; db.filter = db.filter or "all"; db.compat = db.compat or {}; db.chars = db.chars or {}
   elseif event == "ADDON_LOADED" and db then
-    installQuestLogButton()
+    installQuestLogButton(); installAbandonHooks()
   elseif event == "PLAYER_LOGIN" and db then
     local name, realm = UnitName("player"), GetRealmName()
     if name and realm then
@@ -834,7 +908,7 @@ frame:SetScript("OnEvent", function(_, event, name, questID)
       character = db.chars[key]; character.accepted=character.accepted or {}; character.abandoned=character.abandoned or {}
       protected = character.protected
     else say("Character identity unavailable; quest protection and abandonment disabled.", "Charakter nicht erkannt; Questschutz und Abbrechen deaktiviert.") end
-    installQuestLogButton()
+    installQuestLogButton(); installAbandonHooks()
     if db.debug then banner(); refresh() end
   elseif event == "QUEST_DETAIL" and character then
     recordOffer()
@@ -852,11 +926,12 @@ frame:SetScript("OnEvent", function(_, event, name, questID)
   elseif (event == "QUEST_REMOVED" or event == "QUEST_TURNED_IN") and db then
     if protected and type(name) == "number" then protected[name] = nil end
     if character and type(name)=="number" then
-      if event=="QUEST_REMOVED" and pendingAbandon and pendingAbandon.id==name then
-        local saved=character.accepted[name] or {id=name}
-        saved.title=saved.title or pendingAbandon.title; saved.zone=saved.zone or pendingAbandon.zone
-        character.abandoned[name]=saved; pendingAbandon=nil
-      elseif event=="QUEST_TURNED_IN" then
+      if event=="QUEST_REMOVED" then
+        if pendingAbandon and pendingAbandon.id==name then
+          recordAbandoned(name, pendingAbandon.title, pendingAbandon.zone); pendingAbandon=nil
+        else inferAbandon(name) end
+      else
+        turnedIn[name]=true; C_Timer.After(5, function() turnedIn[name]=nil end)
         character.accepted[name]=nil; character.abandoned[name]=nil
         if pendingAbandon and pendingAbandon.id==name then pendingAbandon=nil end
       end

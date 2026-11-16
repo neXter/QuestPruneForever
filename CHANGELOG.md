@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0] - 2026-11-16
+
+- Record quests abandoned through the standard quest log in the Abandoned tab, by following the game's abandon calls.
+- Add `/qp compat abandon hook|infer|off`. `infer` records any quest removal that was not a turn-in and is used automatically when the abandon calls cannot be hooked; `off` disables tracking of standard-log abandons.
+- Show the abandon-tracking state in `/qp dump` and log detected standard-log abandons when debug output is on.
+
 ## [1.0.0] - 2026-11-14
 
 - Show item rewards, money and XP alongside each quest, with tooltips and a compact, aligned reward column.
